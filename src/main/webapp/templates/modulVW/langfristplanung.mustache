@@ -327,18 +327,15 @@
 	</script>
 	
 	
-	<p id="mvsMenu">
-		{{^loginname}}
-		<a class="btn btn-link" data-toggle="modal" data-target=".mod-login-modal">
-				Login
-		</a>
-		{{/loginname}}
-		{{#loginname}}
-		Hallo {{loginname}} <a data-go="//logout:allModule">Logout</a>
-		<br>
-		<a href="/mvs/backend/modulVW/export/sem/3" target="_blank">SS14 Export</a>  |  
-		<a href="/mvs/backend/modulVW/export/sem/4" target="_blank">WS14/15 Export</a>
-		{{/loginname}}
+	<p id="mvsExport">
+	{{#loginname}}
+		Export: 
+		<a href="/mvs/backend/modulVW/export/semester/3" target="_blank">SS14</a>  |  
+		<a href="/mvs/backend/modulVW/export/semester/4" target="_blank">WS14/15</a>
+		Detaillierter Export:
+		<a href="/mvs/backend/modulVW/detailed/semester/3" target="_blank">SS14</a>  |  
+		<a href="/mvs/backend/modulVW/detailed/semester/4" target="_blank">WS14/15</a> 
+	{{/loginname}}
 	</p>
 	
 	<!-- start: navbar -->

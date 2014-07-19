@@ -85,21 +85,23 @@
 					var lvtId = $(this).attr('data-lvtId');
 					var lvtSws = $(this).attr('data-lvtSws');
 					var lvtPflicht = $(this).attr('data-lvtPflicht');
-					var uSws = "nn";
+					var lv;
+					//var uSws = "nn";
 					if($(this).attr('data-usws')){
-						uSws = $(this).attr('data-usws');
-					}
-					var lv = [lvtId,lvtSws,lvtPflicht,uSws];
+						var uSws = $(this).attr('data-usws');
+						lv = [lvtId,lvtSws,lvtPflicht,uSws];
+					}else
+						lv = [lvtId,lvtSws,lvtPflicht];
 					lvs.push(lv);
 				});
 				
-				$('.uebungItem').each(function(){
+				/*$('.uebungItem').each(function(){
 					var lvtId = $(this).attr('data-primaryLvtId');
 					var uSws = $(this).attr('data-uebungSws');
 					var uPflicht = $(this).attr('data-uebungPflicht');
 					var uebung = [lvtId,uSws, uPflicht];
 					uebungen.push(uebung);
-				});
+				});*/
 				
 				var insert = {
 					"miId":miId,
@@ -112,7 +114,7 @@
 					"mSecStos":JSON.stringify(secStos),
 					"mVer":JSON.stringify(verantwortliche),
 					"mLvs":JSON.stringify(lvs),
-					"mUebungen":JSON.stringify(uebungen)
+					//"mUebungen":JSON.stringify(uebungen)
 				};
 				
 				$.ajax({
@@ -125,7 +127,7 @@
 						$(location).attr('href',url);
 					},2500);
 				}).fail(function(req,text,error){
-					alert("ERROR");
+					alert(error);
 				});
 				
 			}

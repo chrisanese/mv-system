@@ -212,7 +212,7 @@
 			<div class="collapse navbar-collapse" id="bs-example">
 				<ul class="nav navbar-nav">
 					<li class="active"><a data-go="//moduleListe:allModule">Alle Veranstaltungen</a></li>
-					<li><a {{#loginname}}data-go="//meineModule:meineModule"{{/loginname}}>Meine  Veranstaltungen</a></li>
+					<li><a {{#loginname}}data-go="//meineModule:meineModule" data-to="//meineModule:meineModule/{{loginname}}" {{/loginname}}>Meine  Veranstaltungen</a></li>
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Langfristplanung <b class="caret"></b></a>
 						<ul class="dropdown-menu">
@@ -228,7 +228,7 @@
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Modulverwaltung <b class="caret"></b></a>
 						<ul class="dropdown-menu">
-							<li><a {{#loginname}}data-go="//newModule:neuesModul"{{/loginname}}>Neues Modul</a></li>
+							<li><a {{#loginname}}data-go="//newModule:neuesModul" data-to="//newModule:neuesModul/{{loginname}}"{{/loginname}}>Neues Modul</a></li>
 							<li><a {{#loginname}}data-toggle="modal" data-target=".mod-editModule-modal"{{/loginname}}>Modul Bearbeiten</a></li>
 							<li><a {{#loginname}}data-go="//newCourse:newCourse"{{/loginname}}>Neue Veranstaltung</a></li>
 							<li><a {{#loginname}}data-toggle="modal" data-target=".mod-lecturer-modal"{{/loginname}}>Neuer Dozent</a></li>

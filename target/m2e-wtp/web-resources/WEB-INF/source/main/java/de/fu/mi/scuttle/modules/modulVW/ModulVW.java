@@ -772,50 +772,57 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 		for(StudienordnungEntity sto : infoStos){
 			List<StoModulEntity> modulListe = sto.getStoModule();
 			for(StoModulEntity stoM : modulListe){
-				ModulEntity modul = stoM.getModul();
-				JsonObject modulJson = new JsonObject()
-				.put("mId", modul.getId())
-				.put("mName", modul.getName())
-				.put("staId", sto.getSta_id());
+				if(stoM != null){
+					ModulEntity modul = stoM.getModul();
+					if(modul!=null){
+					JsonObject modulJson = new JsonObject()
+					.put("mId", modul.getId())
+					.put("mName", modul.getName())
+					.put("staId", sto.getSta_id());
 				
-				switch ((int)sto.getSta_id()) {
-				case 1:
-					infoModules.put(modulJson);
-					break;
-				case 2:
-					minfoModules.put(modulJson);
-					break;
-				case 3:
-					linfoModules.put(modulJson);
-					break;
-				default:
-					break;
+					switch ((int)sto.getSta_id()) {
+					case 1:
+						infoModules.put(modulJson);
+						break;
+					case 2:
+						minfoModules.put(modulJson);
+						break;
+					case 3:
+						linfoModules.put(modulJson);
+						break;
+					default:
+						break;
+					}
+					}
 				}
-				
 			}
 		}
 		
 		for(StudienordnungEntity sto : matheStos){
 			List<StoModulEntity> modulListe = sto.getStoModule();
 			for(StoModulEntity stoM : modulListe){
-				ModulEntity modul = stoM.getModul();
-				JsonObject modulJson = new JsonObject()
-				.put("mId", modul.getId())
-				.put("mName", modul.getName())
-				.put("staId", sto.getSta_id());
-				
-				switch ((int)sto.getSta_id()) {
-				case 1:
-					matheModules.put(modulJson);
-					break;
-				case 2:
-					mmatheModules.put(modulJson);
-					break;
-				case 3:
-					lmatheModules.put(modulJson);
-					break;
-				default:
-					break;
+				if(stoM != null){
+					ModulEntity modul = stoM.getModul();
+					if(modul!=null){
+					JsonObject modulJson = new JsonObject()
+					.put("mId", modul.getId())
+					.put("mName", modul.getName())
+					.put("staId", sto.getSta_id());
+					
+					switch ((int)sto.getSta_id()) {
+					case 1:
+						matheModules.put(modulJson);
+						break;
+					case 2:
+						mmatheModules.put(modulJson);
+						break;
+					case 3:
+						lmatheModules.put(modulJson);
+						break;
+					default:
+						break;
+					}
+					}
 				}
 			}
 		}
@@ -823,24 +830,28 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 		for(StudienordnungEntity sto : physikStos){
 			List<StoModulEntity> modulListe = sto.getStoModule();
 			for(StoModulEntity stoM : modulListe){
-				ModulEntity modul = stoM.getModul();
-				JsonObject modulJson = new JsonObject()
-				.put("mId", modul.getId())
-				.put("mName", modul.getName())
-				.put("staId", sto.getSta_id());
-				
-				switch ((int)sto.getSta_id()) {
-				case 1:
-					physikModules.put(modulJson);
-					break;
-				case 2:
-					mphysikModules.put(modulJson);
-					break;
-				case 3:
-					lphysikModules.put(modulJson);
-					break;
-				default:
-					break;
+				if(stoM != null){
+					ModulEntity modul = stoM.getModul();
+					if(modul!=null){
+					JsonObject modulJson = new JsonObject()
+					.put("mId", modul.getId())
+					.put("mName", modul.getName())
+					.put("staId", sto.getSta_id());
+					
+					switch ((int)sto.getSta_id()) {
+					case 1:
+						physikModules.put(modulJson);
+						break;
+					case 2:
+						mphysikModules.put(modulJson);
+						break;
+					case 3:
+						lphysikModules.put(modulJson);
+						break;
+					default:
+						break;
+					}
+				}
 				}
 				
 			}
@@ -849,27 +860,30 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 		for(StudienordnungEntity sto : bioStos){
 			List<StoModulEntity> modulListe = sto.getStoModule();
 			for(StoModulEntity stoM : modulListe){
-				ModulEntity modul = stoM.getModul();
-				JsonObject modulJson = new JsonObject()
-				.put("mId", modul.getId())
-				.put("mName", modul.getName())
-				.put("staId", sto.getSta_id());
-				
-				
-				switch ((int)sto.getSta_id()) {
-				case 1:
-					bioModules.put(modulJson);
-					break;
-				case 2:
-					mbioModules.put(modulJson);
-					break;
-				case 3:
-					lbioModules.put(modulJson);
-					break;
-				default:
-					break;
+				if(stoM != null){
+					ModulEntity modul = stoM.getModul();
+					if(modul!=null){
+					JsonObject modulJson = new JsonObject()
+					.put("mId", modul.getId())
+					.put("mName", modul.getName())
+					.put("staId", sto.getSta_id());
+					
+					
+					switch ((int)sto.getSta_id()) {
+					case 1:
+						bioModules.put(modulJson);
+						break;
+					case 2:
+						mbioModules.put(modulJson);
+						break;
+					case 3:
+						lbioModules.put(modulJson);
+						break;
+					default:
+						break;
+					}
+					}
 				}
-				
 			}
 		}
 		
@@ -1197,7 +1211,7 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 		JSONArray mSecStos = new JSONArray(request.get("mSecStos"));
 		JSONArray mVer = new JSONArray(request.get("mVer"));
 		JSONArray mLvs = new JSONArray(request.get("mLvs"));
-		JSONArray mUebungen = new JSONArray(request.get("mUebungen"));
+		//JSONArray mUebungen = new JSONArray(request.get("mUebungen"));
 		
 		// Neues Modul in DB eintragen
 		db().getTransaction().begin();
@@ -1255,11 +1269,14 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 			
 			for(int i = 0; i < mLvs.length(); i++){
 				JSONArray lv = mLvs.getJSONArray(i);
-				if(lv.length() == 4){
+				if(lv.length() >= 3){
 					long lvtId = lv.getLong(0);
 					String lvtSws = lv.getString(1);
 					boolean lvtPflicht = lv.getBoolean(2);
-					
+					System.out.println("Sws "+lvtSws);
+					System.out.println("mid "+ mId);
+					System.out.println("lvt id " + lvtId);
+					System.out.println("pflicht "+lvtPflicht);
 					db().getTransaction().begin();
 					ModulLvsEntity modulLv = new ModulLvsEntity();
 					modulLv.setSws(lvtSws);
@@ -1269,54 +1286,25 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 					db().persist(modulLv);
 					db().getTransaction().commit();
 					
-					if(lvtId == 1){
+					System.out.println(modulLv.getId());
+					if(lvtId == 1 && lv.length() > 3){
 						String uSws = lv.getString(3);
-						if(uSws != "nn"){
-							db().getTransaction().begin();
-							ModulLvsEntity uebungLv = new ModulLvsEntity();
-							uebungLv.setSws(uSws);
-							uebungLv.setAnwesenheitspflicht(true);
-							uebungLv.setPrimary(modulLv.getId());
-							uebungLv.setM_id(mId);
-							uebungLv.setLvt_id(2);
-							db().persist(uebungLv);
-							db().getTransaction().commit();
-						}
+						System.out.println(uSws +" prim " + modulLv.getId());
+						
+						db().getTransaction().begin();
+						ModulLvsEntity uebungLv = new ModulLvsEntity();
+						uebungLv.setSws(uSws);
+						uebungLv.setAnwesenheitspflicht(true);
+						uebungLv.setPrimary(modulLv.getId());
+						uebungLv.setM_id(mId);
+						uebungLv.setLvt_id(2);
+						db().persist(uebungLv);
+						db().getTransaction().commit();
 					}
 				}
 			}
 			
-			for(int i = 0; i < mUebungen.length(); i++){
-				JSONArray uebung = mUebungen.getJSONArray(i);
-				if(uebung.length() == 3){
-					long lvtId = uebung.getLong(0);
-					String uSws = uebung.getString(1);
-					boolean uPflicht = uebung.getBoolean(2);
-					
-					ModulLvsEntity primaryModLv = db().createNamedQuery(
-							ModulLvsEntity.GET_PRIMARY_MODULLV,
-							ModulLvsEntity.class)
-							.setParameter("mId", mId)
-							.setParameter("lvtId", lvtId)
-							.getSingleResult();
-					if(primaryModLv != null){
-						db().getTransaction().begin();
-						ModulLvsEntity modulLv = new ModulLvsEntity();
-						modulLv.setSws(uSws);
-						modulLv.setM_id(mId);					
-						modulLv.setLvt_id(2);
-						modulLv.setAnwesenheitspflicht(uPflicht);
-						modulLv.setPrimary(primaryModLv.getId());
-						db().persist(modulLv);
-						db().getTransaction().commit();
-					}
-				}
-			/*	
-				
-				System.out.println("Primary lvt "+uebungLvt);
-				*/
-				
-			}
+			
 		}
 		
 		
@@ -2831,6 +2819,7 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 			// System.out.println("TYP ID "+lvTypen.getLong(i));
 			// System.out.println("TYP ID "+lvSws.getString(i));
 			// System.out.println("TYP Pflicht "+lvAPflicht.getBoolean(i));
+			System.out.println(lvSws.get(i));
 			LehrveranstaltungEntity lv = new LehrveranstaltungEntity();
 			lv.setName(lvName);
 			lv.setLvt_id(lvTypen.getLong(i));
