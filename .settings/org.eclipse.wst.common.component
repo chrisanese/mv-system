@@ -4,6 +4,9 @@
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
+        <dependent-module archiveName="scuttle-library-0.6.1.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/scuttle-library/scuttle-library">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
         <property name="context-root" value="mvs"/>
         <property name="java-output-path" value="/scuttle/target/classes"/>
     </wb-module>
