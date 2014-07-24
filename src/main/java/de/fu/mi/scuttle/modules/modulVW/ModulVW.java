@@ -186,7 +186,7 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 				re.put("loginname", request.getSession().get("username"));
 			response = new JSONResponse(re);
 			break;
-		/*case "updateSchedule":
+		case "updateSchedule":
 			re = updateSchedule(request);
 			re.put("editM", getMEditData());
 			if(request.getSession().get("firstlogin")!= null){
@@ -196,7 +196,7 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 			if(request.getSession().get("username")!= null)
 				re.put("loginname", request.getSession().get("username"));
 			response = new JSONResponse(re);
-			break;*/
+			break;
 		case "login":
 			response = new JSONResponse(login(request));
 			break;
@@ -1878,7 +1878,7 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 		return ret.put("logged", request.getSession().get("username") != null);
 	}
 
-	/*private JsonObject updateSchedule(ScuttleRequest request) throws JSONException {
+	private JsonObject updateSchedule(ScuttleRequest request) throws JSONException {
 		JSONArray loescheP = new JSONArray(request.get("removeP"));
 		JSONArray neueP = new JSONArray(request.get("newP"));
 		//System.out.println(neueP.length());
@@ -1935,7 +1935,7 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 		}
 		return new JsonObject().put("success", "true");
 	}
-*/
+
 	/**
 	 * 
 	 * @param iId,	Institut fuer welches die Langfrisplanung gezeigt wird
