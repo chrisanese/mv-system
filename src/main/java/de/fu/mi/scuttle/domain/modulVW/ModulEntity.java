@@ -18,9 +18,30 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="modulverwaltung1_modul")
-
+@NamedQueries({
+	@NamedQuery(
+		name = ModulEntity.GET_VERTIEFUNG,
+		query = "SELECT m " +
+				"FROM ModulEntity m, SekStoEntity ss, StoModulEntity sm, StudienordnungEntity sto "+
+				"WHERE ss.sto_id = :stoId AND m.id = ss.m_id "+
+				"AND sm.m_id = m.id "+
+				"AND (sm.frequency = 5 OR sm.frequency = :freq1 OR sm.frequency = :freq2) "+
+				"AND sto.i_id = :iId AND sm.sto_id = sto.id"
+	),
+	@NamedQuery(
+			name = ModulEntity.GET_NEBENFACH,
+			query = "SELECT m " +
+					"FROM ModulEntity m, SekStoEntity ss, StoModulEntity sm, StudienordnungEntity sto "+
+					"WHERE ss.sto_id = :stoId AND m.id = ss.m_id "+
+					"AND sm.m_id = m.id "+
+					"AND (sm.frequency = 5 OR sm.frequency = :freq1 OR sm.frequency = :freq2) "+
+					"AND NOT (sto.i_id = :iId) AND sm.sto_id = sto.id"
+		)
+})
 public class ModulEntity {
 	
+	public static final String GET_VERTIEFUNG = "m.seksto";
+	public static final String GET_NEBENFACH = "m.nebenfach";
 	public static final String GET_MODULE_BY_INSTITUTE = "module.institute";
 	
 	@Column(name="m_id",nullable=false)

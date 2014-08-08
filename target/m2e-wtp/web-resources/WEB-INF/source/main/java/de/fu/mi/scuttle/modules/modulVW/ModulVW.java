@@ -59,9 +59,6 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 		super(parent);
 		redo();
 		updateData();
-		/*setFactory(Persistence
-				.createEntityManagerFactory(PERSISTENCE_UNIT_NAME));
-		setEm(EntityManagerWrapper.wrap(getFactory().createEntityManager()));*/
 	}
 	
 	private void updateData() throws JSONException {
@@ -91,7 +88,6 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 
 		String semId = "", mId = "";
 		if (paths.length > 1) {
-		//	System.out.println(paths[0] + " " + paths[1] + " " + paths[2]);
 			mId = paths[1];
 			semId = paths[2];
 			path = paths[0];
@@ -146,7 +142,7 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 			response = new JSONResponse(re);
 			break;
 
-		case "moduleList":
+		/*case "moduleList":
 			re = getModuleList();
 			re.put("editM", getMEditData());
 			if(request.getSession().get("firstlogin")!= null){
@@ -156,7 +152,7 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 			if(request.getSession().get("username")!= null)
 				re.put("loginname", request.getSession().get("username"));
 			response = new JSONResponse(re);
-			break;
+			break;*/
         case "export":
             return new ParameterizedPDFResponse(new JSONResponse(getModuleInfos(request)), ModulVW.class.getResourceAsStream("modulVW.xsl"), "sId", semId);
         case "detailed":
@@ -492,7 +488,6 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 				for(int i=0; i < loescheAt.length();i++){
 					String atId = (String) loescheAt.get(i);
 					KlausurEntity klaus = db().find(KlausurEntity.class, Long.parseLong(atId));
-					//UebungPlanungEntity plan = db().find(UebungPlanungEntity.class, Long.parseLong(pId));
 					if(klaus != null){
 						db().getTransaction().begin();
 						db().remove(klaus);
@@ -522,7 +517,6 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 				String rId = (String) nLv.get(3);
 				long tId = 0;
 				
-				//System.out.println("von "+von + " bis "+bis);
 				TerminEntity termin = db().createNamedQuery(
 						TerminEntity.GET_ID_BY_DAY_TIME,
 						TerminEntity.class)
@@ -541,8 +535,6 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 					tId = newTermin.getId();
 				}else
 					tId = termin.getId();
-				//System.out.println("TId : " + tId);
-			
 			
 				db().getTransaction().begin();
 				PlanungEntity lvPlan = new PlanungEntity();
@@ -1075,7 +1067,6 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 		if(!atermineListJson.isEmpty())
 			ret.put("atermine", atermineListJson);
 		
-		
 		// Data for Modals
 		List<LecturerEntity> lecList = db().findAll(LecturerEntity.class);
 		JsonArray lecListJson = new JsonArray();
@@ -1156,11 +1147,6 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 						.setParameter("iId", iId)
 						.getSingleResult();
 				
-				/*
-				 * TO-DO COunter erhoehen 
-				 * 
-				 */
-				
 				String counter = parseCounter(mCounter.getCounter());
 				String lvNummer = institute.getFachbereich().getKuerzel()
 						+ institute.getKuerzel()
@@ -1211,7 +1197,6 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 		JSONArray mSecStos = new JSONArray(request.get("mSecStos"));
 		JSONArray mVer = new JSONArray(request.get("mVer"));
 		JSONArray mLvs = new JSONArray(request.get("mLvs"));
-		//JSONArray mUebungen = new JSONArray(request.get("mUebungen"));
 		
 		// Neues Modul in DB eintragen
 		db().getTransaction().begin();
@@ -1233,7 +1218,6 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 				.getSingleResult();
 		
 		if(sto != null){
-			//System.out.println("studienordnung " + sto.getId());
 			db().getTransaction().begin();
 			StoModulEntity stoModul = new StoModulEntity();
 			stoModul.setEcts(mEcts);
@@ -1374,16 +1358,12 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 							.setParameter("staId", staId)
 							.getSingleResult();
 					if(sto != null){
-						//System.out.println("Found "+sto.getId()+" inst "+ iId);
-						
 						JsonObject staJson = new JsonObject()
 						.put("stoId", sto.getId())
 						.put("stoName", sto.getName())
 						.put("stoJahr", sto.getJahr())
 						.put("staId", sta.getId())
-						.put("staName", sta.getName());
-						
-											
+						.put("staName", sta.getName());											
 						
 						JsonArray sListJson = new JsonArray();
 						for(SemesterEntity semester : semesterList){
@@ -1391,8 +1371,6 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 							.put("sId", semester.getId())
 							.put("sJahr", semester.getJahr())
 							.put("sTyp", semester.getTyp());
-							
-							//System.out.println("Beginne Semester "+semester.getId());
 							
 							long freq1 = 1, freq2 = 3;
 							if(semester.getTyp() == 1){
@@ -1532,9 +1510,7 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 												.put("tStart", planung.getStartDatum())
 												.put("tEnde", planung.getEndDatum());
 											
-											terminListeJson.put(terminJson);
-
-											
+											terminListeJson.put(terminJson);											
 											
 											List<SemesterLecturerEntity> semLecturerList = planung.getSemesterLecturer();
 											for(SemesterLecturerEntity semLecturer : semLecturerList){
@@ -1577,7 +1553,6 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 							// Fuer alle nicht regelmaessigen Module
 							JsonArray nonRegModulListJson = new JsonArray();
 							for(StoModulEntity stoModul : nonRegStoModulList){
-								//System.out.println("Durchlaufe regSto");
 								ModulEntity modul = stoModul.getModul();
 								JsonObject modulJson = new JsonObject()
 								.put("mId", modul.getId())
@@ -1604,7 +1579,6 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 											.setParameter("mId", modul.getId())
 											.setParameter("lvtId", modulLv.getLvt_id())
 											.getResultList();
-									//System.out.println("Dazu gehoeren " + lvList.size() + " Lvs");
 									JsonArray lvListJson = new JsonArray();
 									for(LehrveranstaltungEntity lv : lvList){
 										String lNummer = lv.getNummer();
@@ -1691,10 +1665,6 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 											lvJson.put("termine", terminListeJson);
 										if(!dozentenListeJson.isEmpty())
 											lvJson.put("dozenten", dozentenListeJson);
-												
-										
-										
-										
 										lvListJson.put(lvJson);
 									}
 									
@@ -1730,7 +1700,6 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 		}
 		if(!fbListJson.isEmpty())
 			ret.put("fachbereiche", fbListJson);
-		//return new JsonObject().put("success", "here");
 		return ret;
 	}
 
@@ -1777,10 +1746,7 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 									modulLvJson.put("mUebung", true);
 									modulLvJson.put("uSws", modulLvUebung.getSws());
 									modulLvJson.put("uPflicht", modulLvUebung.isAnwesenheitspflicht());
-									//System.out.println("Uebung zu ModulLV "+modulLv.getId()+" mit id "+modulLvUebung.getId()+" und "+modulLvUebung.getSws()+" SWS");
 								}
-										
-								
 								modulLvListJson.put(modulLvJson);
 							}
 						}
@@ -1791,7 +1757,6 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 				}
 			}
 		}
-		//ret.put("module", mListArray);		
 		ret.put("module", mListJson);
 		return ret;
 	}
@@ -1881,8 +1846,6 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 	private JsonObject updateSchedule(ScuttleRequest request) throws JSONException {
 		JSONArray loescheP = new JSONArray(request.get("removeP"));
 		JSONArray neueP = new JSONArray(request.get("newP"));
-		//System.out.println(neueP.length());
-		
 		// Eintragen der Haupttermine
 		for(int i=0; i < loescheP.length();i++){
 			JSONArray lP = loescheP.getJSONArray(i);
@@ -1898,9 +1861,7 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 				db().getTransaction().commit();
 			}
 			
-		}
-		
-		
+		}		
 		// Eintragen der Haupttermine
 		for(int i=0; i < neueP.length();i++){
 			JSONArray nP = neueP.getJSONArray(i);
@@ -1931,7 +1892,6 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 				db().getTransaction().commit();
 				db().persist(semLec);
 			}
-			//System.out.println("Lv "+lvId+" bereits in Planung "+planung.size());
 		}
 		return new JsonObject().put("success", "true");
 	}
@@ -1961,18 +1921,14 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 		}
 		ret.put("allLecturer", lecListJson);
 		
-		//System.out.println("Hole Institut "+iId);
 		InstitutEntity institut = db().find(InstitutEntity.class,Long.parseLong(iId));
-		//System.out.println("Nach Institut");
 		Long semId = Long.parseLong(sId);
-		
-		//Query q = db().createQuery("SELECT s FROM SemesterEntity s WHERE s.id BETWEEN "+semId+" AND " + (semId+4));
 		List<SemesterEntity> semesterList = db().createNamedQuery(SemesterEntity.GET_SEMESTER_BETWEEN,
 				SemesterEntity.class)
 				.setParameter("sId", semId)
 				.setParameter("sId2", (semId+4))
 				.getResultList();
-				//q.getResultList();
+
 		JsonArray semesterArray = new JsonArray();
 		for(SemesterEntity semester : semesterList){
 			JsonObject semesterJson = new JsonObject()
@@ -2005,7 +1961,10 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 					JsonObject modulJson = new JsonObject()
 					.put("mId", modul.getId())
 					.put("mName", modul.getName())
-					.put("mFrequenz", stoModul.getFrequency());
+					.put("mFrequenz", stoModul.getFrequency())
+					.put("mNummer",modul.getMNummer());
+					if(modul.getM_typ() != 4)
+						modulJson.put("mArt",modul.getTypName());
 					
 					List<LehrveranstaltungEntity> lvList = modul.getLvs();
 					JsonArray lvListJson = new JsonArray();
@@ -2015,8 +1974,6 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 						.put("lvTyp",lv.getLvTyp().getName())
 						.put("lvName", lv.getName());
 						
-						//modulJson.put("lvName", lv.getName());
-
 						if(!semesterList.isEmpty()){
 							JsonArray semesterListJson = new JsonArray();
 							for(SemesterEntity semester : semesterList){
@@ -2025,11 +1982,6 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 								.put("sId", semester.getId())								
 								.put("sName", semester.getName())
 								.put("sTyp", semester.getTyp());
-								//semesterListJson.put(semesterJson);
-								
-								/*Query ql = db().createQuery("SELECT l FROM LecturerEntity l WHERE l.id IN ("
-										+ " SELECT sl.l_id FROM SemesterLecturerEntity sl WHERE sl.p_id IN("
-										+ " SELECT p.id FROM PlanungEntity p WHERE p.s_id = "+semester.getId()+" AND p.lv_id ="+lv.getId()+"))");*/
 								
 								List<LecturerEntity> lecturerList = db().createNamedQuery(
 										LecturerEntity.GET_LEC_BY_LV_AND_SEM,
@@ -2050,14 +2002,7 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 								}
 								if(!lecturerListJson.isEmpty())
 									semesterJson.put("lecturer", lecturerListJson);
-								
-								/*List<PlanungEntity> planungList = lv.getPlanungBySemester(semester.getId());
-								JsonArray planListJson = new JsonArray();
-								if(!planungList.isEmpty()){
-									for(PlanungEntity plan : planListJson){
-										JsonObject planJson = new JsonObject();
-									}
-								}*/
+
 								semesterListJson.put(semesterJson);
 								
 							}
@@ -2100,7 +2045,6 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 				PlanungEntity plan = db().find(PlanungEntity.class, Long.parseLong(pId));
 				if(plan != null){
 					db().getTransaction().begin();
-			//		System.out.println("Loesche lv mit pid "+pId);
 					db().remove(plan);
 					db().getTransaction().commit();
 				}
@@ -2113,19 +2057,15 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 			db().getTransaction().begin();
 			if(!mInhalt.equals("false"))
 				modul.setInhalt(mInhalt);
-				//System.out.println("update inhalt");
 				
 			if(!mLit.equals("false"))
 				modul.setLiteratur(mLit);
-				//System.out.println("update lit");
 				
 			if(!mInfo.equals("false"))
 				modul.setVoraussetzung(mInfo);
-				//System.out.println("update info");
 				
 			db().getTransaction().commit();
-		}
-		
+		}		
 		// Eintragen der Haupttermine
 		for(int i=0; i < neueLvs.length();i++){
 			JSONArray nLv = neueLvs.getJSONArray(i);
@@ -2144,7 +2084,6 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 			db().persist(lvPlan);
 			long pId = lvPlan.getId();
 			
-		//	System.out.println("New Plan id "+pId);
 			JSONArray lecturer = nLv.getJSONArray(3);
 			for(int j = 0; j <lecturer.length();j++){
 				String lId = (String) lecturer.get(j);
@@ -2154,7 +2093,6 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 				semLec.setL_id(Long.parseLong(lId));
 				db().getTransaction().commit();
 				db().persist(semLec);
-				//System.out.println("Added lecturer "+lId+" to paln "+pId);
 			}
 			
 		}
@@ -2192,7 +2130,6 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 
 	private JsonObject editModule(String mId, String semId)
 			throws JSONException {
-		//System.out.println("Modul " + mId + " Semester " + semId);
 		JsonObject ret = new JsonObject();
 		// Hole das Modul zu der uebergebenen mId aus der DB
 		ModulEntity modul = db()
@@ -2295,7 +2232,6 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 		}
 
 		JsonArray lecturerListJson = new JsonArray();
-		// List<Long> lecIdList = new ArrayList<Long>();
 		/*
 		 * Alle Hauptveranstaltungen
 		 */
@@ -2470,16 +2406,6 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 							.setParameter("staId", staId)
 							.getSingleResult();
 
-					// Wir holen uns zu jeder sta des Instituts die aktuelle STO
-					/*Query qAktuelleSto = db().createQuery(
-							"SELECT sto FROM StudienordnungEntity sto "
-									+ "WHERE sto.i_id = " + iId
-									+ " AND sto.sta_id = " + staId
-									+ " AND sto.aktuell = 1");*/
-					// qAktuelleSto.setParameter("iId", institut.getId());
-					// qAktuelleSto.setParameter("staId", sta.getId());
-
-					//sto = (StudienordnungEntity) qAktuelleSto.getSingleResult();
 					if (sto != null) {
 						JsonObject staJson = new JsonObject()
 								.put("stoId", sto.getId())
@@ -2537,17 +2463,7 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 												.put("lvNummer", lv.getNummer())
 												.put("lvtId", lvt.getId())
 												.put("lvtName", lvt.getName());
-										
-										/*if (mLvNummer != "") {
-											mLvNummer += " + ";
-											mLvSws += " + ";
-											mLvArt += " + ";
-										}*/
-										//mLvNummer += lv.getNummer();
-										//mLvSws += lv.getSws();
-										//mLvArt += lvt.getName();
-										
-										// List<PlanungEntity> planungList;
+
 										// Hole alle Termine dieser Lv in diesem
 										// Semester
 										List<PlanungEntity> planList = lv
@@ -2556,8 +2472,6 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 										for (PlanungEntity plan : planList) {
 											if (plan.getS_id() == semester
 													.getId()) {
-												/*LecturerEntity tLecturer = plan
-														.getLecturer();*/
 												TerminEntity tTermin = plan
 														.getTermin();
 												RaumEntity tRaum = plan
@@ -2671,7 +2585,6 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 											.put("mEcts", stoModul.getEcts())
 											.put("mFrequenz",
 													stoModul.getFrequency());
-											//.put("mLec", lect);
 									String mTypName = "Pflicht";
 									switch ((int)modul.getM_typ()) {
 									case 2:
@@ -2686,12 +2599,6 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 									}
 									modulJson.put("mTypName", mTypName);
 									
-										
-									
-
-									// if(!modulLecturerListJson.isEmpty())
-									// modulJson.put("mlecturer",
-									// modulLecturerListJson);
 									if (!lvListJson.isEmpty()) {
 										modulJson.put("lvs", lvListJson);
 									}
@@ -2726,7 +2633,6 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 		String iId = request.get("iId");
 		String mName = request.get("mName");
 		String mkId = request.get("mkId");
-		//String mkKuerzel = request.get("mkKuerzel");
 		String mFrequenz = request.get("mFrequenz");
 		String mEcts = request.get("mEcts");
 		String spId = request.get("spId");
@@ -2745,7 +2651,6 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 				Long.parseLong(iId));
 		String lvNummer = institut.getFachbereich().getKuerzel()
 				+ institut.getKuerzel();
-	//	System.out.println("Lv Nummer fb + inst " + lvNummer);
 		// Hole Counter fuer Institut
 		Query counter = db().createQuery(
 				"SELECT mc FROM ModulCounterEntity mc WHERE mc.i_id ="
@@ -2755,9 +2660,7 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 
 		long mCounter = modulCounter.getCounter();
 		String parsedCounter = parseCounter(mCounter);
-		lvNummer += parsedCounter; // Bis auf letzten beiden Ziffern wurde
-									// eindeutige Nummer erstellt
-		// System.out.println("Lange Lv "+lvNummer);
+		lvNummer += parsedCounter; // Bis auf letzten beiden Ziffern wurde eindeutige Nummer erstellt
 
 		// counter fuer gewaehltes institut muss erhoeht werden
 		db().getTransaction().begin();
@@ -2815,11 +2718,6 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 					lvTypen.getLong(i));
 			String lvNum = modul.getMNummer() + lvTyp.getKuerzel();
 			String lvName = lvTyp.getName() + " : " + modul.getName();
-			// System.out.println("TYP Kuerzel "+lvTyp.getKuerzel()+" Name "+lvTyp.getName());
-			// System.out.println("TYP ID "+lvTypen.getLong(i));
-			// System.out.println("TYP ID "+lvSws.getString(i));
-			// System.out.println("TYP Pflicht "+lvAPflicht.getBoolean(i));
-			System.out.println(lvSws.get(i));
 			LehrveranstaltungEntity lv = new LehrveranstaltungEntity();
 			lv.setName(lvName);
 			lv.setLvt_id(lvTypen.getLong(i));
@@ -3034,14 +2932,7 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 			List<RaumEntity> freieRaeumeListe = gebaeude.getRaeume();
 			if (!freieRaeumeListe.isEmpty()) {
 				JsonArray raumListeJson = new JsonArray();
-				for (RaumEntity raum : freieRaeumeListe) {
-					/*Query q = db()
-							.createQuery(
-									"SELECT t FROM TerminEntity t WHERE t.id NOT IN ("
-											+ " SELECT p.t_id FROM PlanungEntity p WHERE p.s_id = "
-											+ sId + " AND p.r_id="
-											+ raum.getId() + ")");*/
-					
+				for (RaumEntity raum : freieRaeumeListe) {					
 					List<TerminEntity> terminListe = db().createNamedQuery(
 							TerminEntity.GET_FREE_TERMIN,
 							TerminEntity.class)
@@ -3156,7 +3047,6 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 						.setParameter("staId", staId)
 						.getSingleResult();
 				if(sto != null){
-						//System.out.println("Found "+sto.getId()+" inst "+ iId);
 						
 					JsonObject staJson = new JsonObject()
 					.put("stoId", sto.getId())
@@ -3167,8 +3057,6 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 						
 											
 					SemesterEntity semester = db().find(SemesterEntity.class, Long.parseLong(sId));
-						//JsonArray sListJson = new JsonArray();
-						//for(SemesterEntity semester : semesterList){
 					if(semester != null){
 						JsonObject semesterJson = new JsonObject()
 						.put("sId", semester.getId())
@@ -3196,11 +3084,28 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 								.setParameter("freq1", freq1)
 								.setParameter("freq2", freq2)
 								.getResultList();
+						
+						List<ModulEntity> vertiefungModulList = db().createNamedQuery(
+								ModulEntity.GET_VERTIEFUNG,
+								ModulEntity.class)
+								.setParameter("stoId", sto.getId())
+								.setParameter("freq1", freq1)
+								.setParameter("freq2", freq2)
+								.setParameter("iId", iId)
+								.getResultList();
+						
+						List<ModulEntity> nebenFachModulList = db().createNamedQuery(
+								ModulEntity.GET_NEBENFACH,
+								ModulEntity.class)
+								.setParameter("stoId", sto.getId())
+								.setParameter("freq1", freq1)
+								.setParameter("freq2", freq2)
+								.setParameter("iId", iId)
+								.getResultList();
 							
 						JsonArray modulListJson = new JsonArray();
 							
 						for(StoModulEntity stoModul : regStoModulList){
-							//System.out.println("Durchlaufe regSto");
 							ModulEntity modul = stoModul.getModul();
 							JsonObject modulJson = new JsonObject()
 							.put("mId", modul.getId())
@@ -3252,7 +3157,8 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 									.put("lvName", lv.getName())
 									.put("lvInhalt", lv.getInhalt())
 									.put("lvLiteratur", lv.getLiteratur())
-									.put("lvVoraussetzung", lv.getVoraussetzung());
+									.put("lvVoraussetzung", lv.getVoraussetzung())
+									.put("lvNr", lv.getNummer());
 										
 										
 									UebungEntity uebung = lv.getUebung();
@@ -3344,13 +3250,12 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 								modulJson.put("mlvs", modulLvListJson);
 								modulListJson.put(modulJson);							
 							}
-							if(!modulListJson.isEmpty())
-								semesterJson.put("module",modulListJson);							
+							/*if(!modulListJson.isEmpty())
+								semesterJson.put("module",modulListJson);*/							
 							
 							// Fuer alle nicht regelmaessigen Module
 							JsonArray nonRegModulListJson = new JsonArray();
 							for(StoModulEntity stoModul : nonRegStoModulList){
-								//System.out.println("Durchlaufe regSto");
 								ModulEntity modul = stoModul.getModul();
 								JsonObject modulJson = new JsonObject()
 								.put("mId", modul.getId())
@@ -3477,8 +3382,311 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 							}
 							if(!nonRegModulListJson.isEmpty())
 								semesterJson.put("nRModule",nonRegModulListJson);
-							if(!semesterJson.isEmpty())
-								staJson.put("semester", semesterJson);
+							
+							
+							
+							JsonArray nebenFachListJson = new JsonArray();
+							
+							for(ModulEntity modul : nebenFachModulList){
+
+								StoModulEntity stoModul = modul.getCurrentStoModul();
+								JsonObject modulJson = new JsonObject()
+								.put("mId", modul.getId())
+								.put("mName", modul.getName())
+								.put("mNummer", modul.getMNummer())
+								.put("mArt", modul.getTypName())
+								.put("mEcts", stoModul.getEcts())
+								.put("mTyp", modul.getM_typ())
+								.put("mFrequenz", stoModul.getFrequenz())
+								.put("mSekSto", "Nebenfach");
+									
+								List<ModulHuelsenEntity> huelsenListe = modul.getModulHuelsen();
+								JsonArray huelsenListeJson = new JsonArray();
+								if(huelsenListe != null){
+									for(ModulHuelsenEntity mhuelse : huelsenListe){
+										HuelsenEntity huelse = mhuelse.getHuelse();
+										JsonObject huelseJson = new JsonObject()
+										.put("hId",huelse.getId())
+										.put("hKuerzel",huelse.getKuerzel());
+										
+										huelsenListeJson.put(huelseJson);
+									}
+								}
+								if(!huelsenListeJson.isEmpty())
+									modulJson.put("huelsen", huelsenListeJson);
+									
+								List<ModulLvsEntity> modulLvList = db().createNamedQuery(
+										ModulLvsEntity.GET_MODULES,
+										ModulLvsEntity.class)
+										.setParameter("mId", modul.getId())
+										.getResultList();
+								
+								JsonArray modulLvListJson = new JsonArray();
+								for(ModulLvsEntity modulLv : modulLvList){
+									List<LehrveranstaltungEntity> lvList = db().createNamedQuery(
+											LehrveranstaltungEntity.GET_LV_BY_MODUL_LVT,
+											LehrveranstaltungEntity.class)
+											.setParameter("mId", modul.getId())
+											.setParameter("lvtId", modulLv.getLvt_id())
+											.getResultList();
+										
+									JsonArray lvListJson = new JsonArray();
+									for(LehrveranstaltungEntity lv : lvList){
+										String lNummer = lv.getNummer();
+										String lTyp = lv.getLvTyp().getName();
+										String lSws = lv.getSws();
+										
+										JsonObject lvJson = new JsonObject()
+										.put("lvId", lv.getId())
+										.put("lvName", lv.getName())
+										.put("lvInhalt", lv.getInhalt())
+										.put("lvLiteratur", lv.getLiteratur())
+										.put("lvVoraussetzung", lv.getVoraussetzung());
+											
+											
+										UebungEntity uebung = lv.getUebung();
+										if(uebung != null ){
+											lvJson
+											.put("lvUebung", true)
+											.put("lvUebungSws", uebung.getSws());
+											lNummer += " + " + uebung.getLvnummer();
+											lTyp += " + Übung";
+											lSws += " + " + uebung.getSws();
+										}
+										lvJson
+										.put("lvNummer", lNummer)
+										.put("lvTyp", lTyp)
+										.put("lvSws", lSws);
+											
+										List<PlanungEntity> semesterPlanungsListe = db().createNamedQuery(
+												PlanungEntity.GET_PLANUNG_BY_SEMESTER,
+												PlanungEntity.class)
+												.setParameter("lvId", lv.getId())
+												.setParameter("sId", semester.getId())
+												.getResultList();
+											
+										JsonArray terminListeJson = new JsonArray();
+											
+										JsonArray dozentenListeJson = new JsonArray();
+										List<Long> dozentenIdList = new ArrayList<Long>();
+										
+										for(PlanungEntity planung : semesterPlanungsListe){
+											TerminEntity termin = planung.getTermin();
+											RaumEntity raum = planung.getRaum();
+											GebaeudeEntity gebaeude = raum.getGebaeude();
+											
+											JsonObject terminJson = new JsonObject()
+											.put("pId", planung.getId())
+											.put("tId", termin.getId())
+											.put("tTag", termin.getTag())
+											.put("tVon", termin.getVon())
+											.put("tBis", termin.getBis())
+											.put("rId", raum.getId())
+											.put("rId", raum.getName())
+											.put("rId", raum.getKuerzel())
+											.put("gId", gebaeude.getId())
+											.put("gName", gebaeude.getName())
+											.put("gKuerzel", gebaeude.getKuerzel())
+											.put("gStrasse", gebaeude.getStrasse())
+											.put("gStrassenNr", gebaeude.getStrassenNr());
+											
+											
+											if(termin.getTag()=="Blockveranstaltung")
+												terminJson
+												.put("tStart", planung.getStartDatum())
+												.put("tEnde", planung.getEndDatum());
+											
+											terminListeJson.put(terminJson);
+
+											List<SemesterLecturerEntity> semLecturerList = planung.getSemesterLecturer();
+											for(SemesterLecturerEntity semLecturer : semLecturerList){
+												if(!dozentenIdList.contains(semLecturer.getL_id())){
+													LecturerEntity lecturer = semLecturer.getLecturer();
+													JsonObject lecturerJson = new JsonObject()
+													.put("lId", lecturer.getId())
+													.put("lVorname", lecturer.getVorname())
+													.put("lNachname", lecturer.getNachname())
+													.put("lZedat", lecturer.getZedat())
+													.put("lEmail", lecturer.getEmail());
+													dozentenIdList.add(lecturer.getId());
+													dozentenListeJson.put(lecturerJson);
+												}
+											}
+												
+											if(!terminListeJson.isEmpty())
+												lvJson.put("termine", terminListeJson);
+											if(!dozentenListeJson.isEmpty())
+												lvJson.put("dozenten", dozentenListeJson);
+												
+										}
+										lvListJson.put(lvJson);											
+									}
+										
+									if(!lvListJson.isEmpty()){
+										JsonObject mLvJson = new JsonObject()
+										.put("lvs", lvListJson);
+										modulLvListJson.put(mLvJson);
+									}
+
+								}
+								if(!modulLvListJson.isEmpty())
+									modulJson.put("mlvs", modulLvListJson);
+									modulListJson.put(modulJson);							
+								}
+								
+								for(ModulEntity modul : vertiefungModulList){
+									String sekSto = "Vertiefung";
+									if(modul.getCurrentStoModul().getSto().getSta_id() == 1)
+										sekSto = modul.getTypName();
+									StoModulEntity stoModul = modul.getCurrentStoModul();
+									JsonObject modulJson = new JsonObject()
+									.put("mId", modul.getId())
+									.put("mName", modul.getName())
+									.put("mNummer", modul.getMNummer())
+									.put("mArt", modul.getTypName())
+									.put("mEcts", stoModul.getEcts())
+									.put("mTyp", modul.getM_typ())
+									.put("mFrequenz", stoModul.getFrequenz())
+									.put("mSekSto", sekSto);
+										
+									List<ModulHuelsenEntity> huelsenListe = modul.getModulHuelsen();
+									JsonArray huelsenListeJson = new JsonArray();
+									if(huelsenListe != null){
+										for(ModulHuelsenEntity mhuelse : huelsenListe){
+											HuelsenEntity huelse = mhuelse.getHuelse();
+											JsonObject huelseJson = new JsonObject()
+											.put("hId",huelse.getId())
+											.put("hKuerzel",huelse.getKuerzel());
+											
+											huelsenListeJson.put(huelseJson);
+										}
+									}
+									if(!huelsenListeJson.isEmpty())
+										modulJson.put("huelsen", huelsenListeJson);
+										
+									List<ModulLvsEntity> modulLvList = db().createNamedQuery(
+											ModulLvsEntity.GET_MODULES,
+											ModulLvsEntity.class)
+											.setParameter("mId", modul.getId())
+											.getResultList();
+									
+									JsonArray modulLvListJson = new JsonArray();
+									for(ModulLvsEntity modulLv : modulLvList){
+										List<LehrveranstaltungEntity> lvList = db().createNamedQuery(
+												LehrveranstaltungEntity.GET_LV_BY_MODUL_LVT,
+												LehrveranstaltungEntity.class)
+												.setParameter("mId", modul.getId())
+												.setParameter("lvtId", modulLv.getLvt_id())
+												.getResultList();
+											
+										JsonArray lvListJson = new JsonArray();
+										for(LehrveranstaltungEntity lv : lvList){
+											String lNummer = lv.getNummer();
+											String lTyp = lv.getLvTyp().getName();
+											String lSws = lv.getSws();
+											
+											JsonObject lvJson = new JsonObject()
+											.put("lvId", lv.getId())
+											.put("lvName", lv.getName())
+											.put("lvInhalt", lv.getInhalt())
+											.put("lvLiteratur", lv.getLiteratur())
+											.put("lvVoraussetzung", lv.getVoraussetzung());
+												
+												
+											UebungEntity uebung = lv.getUebung();
+											if(uebung != null ){
+												lvJson
+												.put("lvUebung", true)
+												.put("lvUebungSws", uebung.getSws());
+												lNummer += " + " + uebung.getLvnummer();
+												lTyp += " + Übung";
+												lSws += " + " + uebung.getSws();
+											}
+											lvJson
+											.put("lvNummer", lNummer)
+											.put("lvTyp", lTyp)
+											.put("lvSws", lSws);
+												
+											List<PlanungEntity> semesterPlanungsListe = db().createNamedQuery(
+													PlanungEntity.GET_PLANUNG_BY_SEMESTER,
+													PlanungEntity.class)
+													.setParameter("lvId", lv.getId())
+													.setParameter("sId", semester.getId())
+													.getResultList();
+												
+											JsonArray terminListeJson = new JsonArray();
+												
+											JsonArray dozentenListeJson = new JsonArray();
+											List<Long> dozentenIdList = new ArrayList<Long>();
+											
+											for(PlanungEntity planung : semesterPlanungsListe){
+												TerminEntity termin = planung.getTermin();
+												RaumEntity raum = planung.getRaum();
+												GebaeudeEntity gebaeude = raum.getGebaeude();
+												
+												JsonObject terminJson = new JsonObject()
+												.put("pId", planung.getId())
+												.put("tId", termin.getId())
+												.put("tTag", termin.getTag())
+												.put("tVon", termin.getVon())
+												.put("tBis", termin.getBis())
+												.put("rId", raum.getId())
+												.put("rId", raum.getName())
+												.put("rId", raum.getKuerzel())
+												.put("gId", gebaeude.getId())
+												.put("gName", gebaeude.getName())
+												.put("gKuerzel", gebaeude.getKuerzel())
+												.put("gStrasse", gebaeude.getStrasse())
+												.put("gStrassenNr", gebaeude.getStrassenNr());
+												
+												
+												if(termin.getTag()=="Blockveranstaltung")
+													terminJson
+													.put("tStart", planung.getStartDatum())
+													.put("tEnde", planung.getEndDatum());
+												
+												terminListeJson.put(terminJson);
+
+												List<SemesterLecturerEntity> semLecturerList = planung.getSemesterLecturer();
+												for(SemesterLecturerEntity semLecturer : semLecturerList){
+													if(!dozentenIdList.contains(semLecturer.getL_id())){
+														LecturerEntity lecturer = semLecturer.getLecturer();
+														JsonObject lecturerJson = new JsonObject()
+														.put("lId", lecturer.getId())
+														.put("lVorname", lecturer.getVorname())
+														.put("lNachname", lecturer.getNachname())
+														.put("lZedat", lecturer.getZedat())
+														.put("lEmail", lecturer.getEmail());
+														dozentenIdList.add(lecturer.getId());
+														dozentenListeJson.put(lecturerJson);
+													}
+												}
+													
+												if(!terminListeJson.isEmpty())
+													lvJson.put("termine", terminListeJson);
+												if(!dozentenListeJson.isEmpty())
+													lvJson.put("dozenten", dozentenListeJson);
+													
+											}
+											lvListJson.put(lvJson);											
+										}
+											
+										if(!lvListJson.isEmpty()){
+											JsonObject mLvJson = new JsonObject()
+											.put("lvs", lvListJson);
+											modulLvListJson.put(mLvJson);
+										}
+
+									}
+									if(!modulLvListJson.isEmpty())
+										modulJson.put("mlvs", modulLvListJson);
+										modulListJson.put(modulJson);
+										//vertiefungListJson.put(modulJson);							
+									}
+									if(!modulListJson.isEmpty())
+										semesterJson.put("module",modulListJson);
+								if(!semesterJson.isEmpty())
+									staJson.put("semester", semesterJson);
 						}
 						staListJson.put(staJson);
 					}

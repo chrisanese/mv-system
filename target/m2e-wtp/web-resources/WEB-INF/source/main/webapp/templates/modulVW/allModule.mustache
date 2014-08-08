@@ -9,6 +9,21 @@
 		* ======================================== *
 		* ======================================== */
 		$(document).ready(function(){
+			if($.cookie("extended")){
+				if($.cookie("extended") == 1){
+					$('#showExtendedView').prop('checked',true);
+					$('.lvExtended').removeClass('hidden');
+				}else
+					$('#showExtendedView').removeAttr('checked');
+			}
+			if($.cookie("showM")){
+				if($.cookie("showM") == 1){
+					$('#showExtendedView').prop('checked',true);
+					$('.lvExtended').removeClass('hidden');
+				}else
+					$('#showExtendedView').removeAttr('checked');
+			}
+			//if($.cookie("mname"))
 			sem = $('.semesterTable').first().attr('data-sId');
 			inst = $('.semesterTable').first().attr('data-iId');
 			if(inst == undefined)
@@ -78,7 +93,7 @@
 				$('.module, .nRmodule, .nRmodule-header').addClass('hidden');
 			}
 			$('.lv').each(function(){
-				if($(this).attr('data-lvname').toLowerCase().indexOf(word) == -1 ){
+				if($(this).attr('data-lvname').toLowerCase().indexOf(word) == -1 && $(this).attr('data-lvart').toLowerCase().indexOf(word) == -1){
 					$(this).addClass('hidden');
 				}else{
 					$(this).removeClass('hidden');
@@ -92,6 +107,10 @@
 				
 			});
 			
+		});
+		
+		$('#searchform').submit(function(){
+			return false;
 		});
 		
 		/*======================================= *
@@ -110,10 +129,13 @@
 		* ========= SHOW EXTENDED VIEW ==========
 		* ========================================*/
 		$('#showExtendedView').change(function(){
-			if($('#showExtendedView').prop('checked'))
+			if($('#showExtendedView').prop('checked')){
 				$('.lvExtended').removeClass('hidden');
-			else
+				$.cookie("extended",1);
+			}else{
 				$('.lvExtended').addClass('hidden');
+				$.cookie("extended",0);
+			}
 		});
 		
 		/*======================================= *
@@ -123,8 +145,19 @@
 			var ext ="";
 			if($('#showModuleName').prop('checked')){
 				if($('#showModuleName').attr('sorted'))
-					ext ="-min";					
-				$('.module'+ext).removeClass('hidden');
+					ext ="-min";
+				if($('#searchbar').val().length > 0){
+					$('.lv').not('.hidden').each(function(){
+						mid = $(this).attr('data-mid');
+						$('.module-'+mid+ext).removeClass('hidden');
+					})
+					$('.nRlv').not('.hidden').each(function(){
+						mid = $(this).attr('data-mid');
+						$('.nRmodule-'+mid+ext).removeClass('hidden');
+					})
+				}else{
+					$('.module'+ext).removeClass('hidden');
+				}
 				if($('#showNRModules').prop('checked')){
 					$('.nRmodule'+ext).removeClass('hidden');
 				}	
@@ -175,7 +208,7 @@
 			
 			$('.lv, .nRlv').each(function(){
 				if($(this).prev('.lv, .nRlv').attr('data-mId') != $(this).attr('data-mId'))
-					$(this).before('<tr class="module-min hidden" data-mName="'+$(this).attr("data-mName")+
+					$(this).before('<tr class="module-min module-'+$(this).attr('data-mId')+'-min hidden" data-mName="'+$(this).attr("data-mName")+
 							'" data-mTyp='+$(this).attr("data-mTyp")+
 							'" data-mArt="'+$(this).attr("data-lvArt")+'">'+
 							'<th></th><th colspan="2">Modul: '+$(this).attr("data-mName")+'</th>'+
@@ -242,7 +275,7 @@
 						</ul>
 					</li>
 				</ul>
-				<form class="navbar-form navbar-right">
+				<form class="navbar-form navbar-right" id="searchform">
 					<div class="form-group">
 						<input type="text" class="form-control" placeholder="Suche" id="searchbar">									
 					</div>
@@ -259,7 +292,7 @@
 		<div class="col-md-2 sidebar">
 			<div class="well well-md" id="sidebar">
 				<ul class="nav nav-pills nav-stacked">
-					<li>Modulname anzeigen <input type="checkbox" id="showModuleName" checked></li>
+					<li>Modulname anzeigen <input type="checkbox" id="showModuleName"></li>
 					<li class="nav-divider"></li>
 					<li>Ausgeweitete Sicht <input type="checkbox" id="showExtendedView"></li>
 					<li class="nav-divider"></li>
@@ -340,7 +373,12 @@
 						<table class="table table-hover table-responsive semesterTable semesterTable-{{sId}} asc" id="semesterTable-{{iId}}-{{staId}}-{{sId}}" data-sId="{{sId}}" data-iId="{{iId}}">
 							<thead>
 								<tr>
-									<th>Lv-Nr</th>
+									<th>
+										Lv-Nr
+										<a class="linkIcons pull-right sortLvNummer" data-do="sort('#semesterTable-{{iId}}-{{staId}}-{{sId}}','data-lvNr');">
+									 		<span class="glyphicon glyphicon-sort"></span>
+									 	</a>
+									</th>
 									<th>
 										Typ
 										<a class="linkIcons pull-right sortTyp" data-do="sort('#semesterTable-{{iId}}-{{staId}}-{{sId}}','data-lvt');">
@@ -380,7 +418,7 @@
 									</tr>
 									{{#mlvs}}
 									{{#lvs}}
-									<tr class="lv lv-{{lvId}} lv-type-{{mTyp}}" data-lvt="{{lvTyp}}" data-lvLec="{{lvLec}}" data-lvName="{{lvName}}" data-lvArt="{{mArt}}" data-mName="{{mName}}" data-mTyp={{mTyp}} data-mNummer="{{#mNummer}}({{mNummer}}){{/mNummer}}" data-mId="{{mId}}">
+									<tr class="lv lv-{{lvId}} lv-type-{{mTyp}}" data-lvt="{{lvTyp}}" data-lvLec="{{lvLec}}" data-lvName="{{lvName}}" data-lvArt="{{mArt}}" data-mName="{{mName}}" data-mTyp={{mTyp}} data-mNummer="{{#mNummer}}({{mNummer}}){{/mNummer}}" data-mId="{{mId}}" data-lvNr="{{lvNr}}">
 										<td><small>{{lvNummer}}</small></td>
 										<td><small>{{lvTyp}}</small></td>
 										<td>
@@ -401,7 +439,7 @@
 										{{/dozenten}}
 										</td>
 										<td><small>{{lvSws}}</small></td>
-										<td><small>{{mArt}}</small></td>	
+										<td><small>{{^mSekSto}}{{mArt}}{{/mSekSto}}{{#mSekSto}}{{mSekSto}}{{/mSekSto}}</small></td>	
 										<td class="hidden lvExtended">
 											<small>{{mNummer}}</small>
 											{{#huelsen}}
@@ -425,7 +463,7 @@
 									</tr>
 									{{#mlvs}}
 									{{#lvs}}
-									<tr class="nRlv nRlv-{{lvId}} hidden" data-lvt="{{lvTyp}}" data-lvLec="{{lvLec}}" data-lvName="{{lvName}}" data-lvArt="{{mArt}}"  data-mName="{{mName}}" data-mTyp={{mTyp}} data-mNummer="{{#mNummer}}({{mNummer}}){{/mNummer}}" data-mId="{{mId}}">
+									<tr class="nRlv nRlv-{{lvId}} hidden" data-lvt="{{lvTyp}}" data-lvLec="{{lvLec}}" data-lvName="{{lvName}}" data-lvArt="{{mArt}}"  data-mName="{{mName}}" data-mTyp={{mTyp}} data-mNummer="{{#mNummer}}({{mNummer}}){{/mNummer}}" data-mId="{{mId}}" data-lvNr="{{lvNr}}">
 										<td><small>{{lvNummer}}</small></td>
 										<td><small>{{lvTyp}}</small></td>
 										<td>
