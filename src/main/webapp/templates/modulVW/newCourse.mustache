@@ -349,8 +349,9 @@
 			<!-- start: Nav -->
 			<div class="collapse navbar-collapse" id="bs-example">
 				<ul class="nav navbar-nav">
-					<li class="active"><a data-go="//moduleListe:allModule">Alle Veranstaltungen</a></li>
+					<li><a data-go="//moduleListe:allModule">Alle Veranstaltungen</a></li>
 					<li><a {{#loginname}}data-go="//meineModule:meineModule"{{/loginname}}>Meine Veranstaltungen</a></li>
+					{{#admin}}
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Langfristplanung <b class="caret"></b></a>
 						<ul class="dropdown-menu">
@@ -363,7 +364,7 @@
 							<li><a {{#loginname}}data-go="//langfristPlanung/11/3/:langfristplanung"{{/loginname}}>Bioinformatik</a></li>				
 						</ul>
 					</li>
-					<li class="dropdown">
+					<li class="dropdown active">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Modulverwaltung <b class="caret"></b></a>
 						<ul class="dropdown-menu">
 							<li><a {{#loginname}}data-go="//newModule:neuesModul"{{/loginname}}>Neues Modul</a></li>
@@ -379,6 +380,7 @@
 							<li><a href="#">DB-Daten</a></li>
 						</ul>
 					</li>
+					{{/admin}}
 				</ul>
 				<form class="navbar-form navbar-right">
 					<div class="form-group">
@@ -390,6 +392,13 @@
 		</div>
 	</nav>
 	<!-- end: navbar -->
+	{{^admin}}
+	<div class="alert alert-danger text-center">
+		<strong>FEHLER</strong><br>
+		Sie haben nicht die nötigen Rechte auf diese Seite zuzugreifen.
+	</div>
+	{{/admin}}
+	{{#admin}}	
 	
 	<form role="form" class="form-horizontal">
 		<!-- Fb -->
@@ -711,6 +720,7 @@
 		</div>
 	</div>
 	<!-- End Edit Module Modal -->
+	{{/admin}}
 	
 	{{>loginTemplate}}
 	{{>newSTOTemplate}}

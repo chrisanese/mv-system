@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -20,14 +21,17 @@ public class UsersEntity {
 	@Id
 	private long id;
 	
-	@Column(name="u_name")
+	@Column(name="u_name",unique = true,nullable=false)
 	private String uname;
 	
 	@Column(name="u_pwd")
 	private String pwd;
 	
-	@OneToMany(mappedBy="user", targetEntity=UserRolesEntity.class, fetch=FetchType.LAZY)
-	List<UserRolesEntity> roles;
+	/*@OneToOne(mappedBy="user", targetEntity=UserRolesEntity.class, fetch=FetchType.LAZY)
+	List<UserRolesEntity> roles;*/
+	
+	@OneToOne(fetch=FetchType.EAGER, mappedBy="user")
+	private UserRolesEntity userrole;
 
 	public long getId() {
 		return id;
@@ -54,15 +58,15 @@ public class UsersEntity {
 	}
 	
 	public boolean checkPwd(String pwd){
-		System.out.println(pwd+ " encrypted"+getPwd());
 		return BCrypt.checkpw(pwd, getPwd());
 	}
 
-	public List<UserRolesEntity> getRoles() {
-		return roles;
+	public UserRolesEntity getUserrole() {
+		return userrole;
 	}
 
-	public void setRoles(List<UserRolesEntity> roles) {
-		this.roles = roles;
+	public void setUserrole(UserRolesEntity userrole) {
+		this.userrole = userrole;
 	}
+
 }

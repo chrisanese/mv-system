@@ -33,17 +33,10 @@
 			
 			$('.semLi-'+sem).addClass('active');
 			$('.stoLi-'+inst).addClass('active');
-			/*$('table.semesterTable').addClass('hidden');
-			$('table.semesterTable-'+sem).removeClass('hidden');
-			
-			$('.stoPanel, .fb').addClass('hidden');
-			$('.fb-1').removeClass('hidden');
-			$('.stoPanel-7').removeClass('hidden');*/
 			
 			// Add lecturer name to lv as attribute
 			$('tr.lv, tr.nRlv').each(function(){
 				var lec = $(this).children('td.lecturers').children().first().attr('data-lname');
-				//alert(lec);
 				$(this).attr('data-lvLec',lec);
 			});
 			
@@ -246,6 +239,7 @@
 				<ul class="nav navbar-nav">
 					<li class="active"><a data-go="//moduleListe:allModule">Alle Veranstaltungen</a></li>
 					<li><a {{#loginname}}data-go="//meineModule:meineModule" data-to="//meineModule:meineModule/{{loginname}}" {{/loginname}}>Meine  Veranstaltungen</a></li>
+					{{#admin}}
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Langfristplanung <b class="caret"></b></a>
 						<ul class="dropdown-menu">
@@ -273,7 +267,7 @@
 							<li><a {{#loginname}}data-toggle="modal" data-target=".mod-sto-modal"{{/loginname}}>Neue Studienordnung anlegen</a></li>
 							<li><a href="#">DB-Daten</a></li>
 						</ul>
-					</li>
+					</li>{{/admin}}
 				</ul>
 				<form class="navbar-form navbar-right" id="searchform">
 					<div class="form-group">
@@ -318,7 +312,7 @@
 								<a data-do="changeInstitute(8);">Mathematik</a>
 							</li>
 							<li class="stoLi stoLi-11">
-								<a data-do="changeInstitute(10);"">Physik</a>
+								<a data-do="changeInstitute(10);">Physik</a>
 							</li>
 							<li class="stoLi stoLi-10">
 								<a data-do="changeInstitute(11);">Bioinformatik</a>

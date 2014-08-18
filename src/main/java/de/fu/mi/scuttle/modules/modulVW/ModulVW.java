@@ -39,6 +39,7 @@ import de.fu.mi.scuttle.domain.modulVW.StudienordnungEntity;
 import de.fu.mi.scuttle.domain.modulVW.TerminEntity;
 import de.fu.mi.scuttle.domain.modulVW.UebungEntity;
 import de.fu.mi.scuttle.domain.modulVW.UebungPlanungEntity;
+import de.fu.mi.scuttle.domain.modulVW.UserRolesEntity;
 import de.fu.mi.scuttle.domain.modulVW.UsersEntity;
 import de.fu.mi.scuttle.lib.ScuttleBackendServlet;
 import de.fu.mi.scuttle.lib.persistence.TypedQuery;
@@ -108,8 +109,13 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 				re.put("firstlogin", request.getSession().get("firstlogin"));
 				request.getSession().remove("firstlogin");
 			}
-			if(request.getSession().get("username")!= null)
+			if(request.getSession().get("username")!= null){
 				re.put("loginname", request.getSession().get("username"));
+				if((boolean) request.getSession().get("admin"))
+					re.put("admin", "admin");
+				else
+					re.put("dozent", "dozent");
+			}
 			response = new JSONResponse(re);
 			break;
 		case "langfristPlanung":
@@ -119,8 +125,13 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 				re.put("firstlogin", request.getSession().get("firstlogin"));
 				request.getSession().remove("firstlogin");
 			}
-			if(request.getSession().get("username")!= null)
+			if(request.getSession().get("username")!= null){
 				re.put("loginname", request.getSession().get("username"));
+				if((boolean) request.getSession().get("admin"))
+					re.put("admin", "admin");
+				else
+					re.put("dozent", "dozent");
+			}
 			response = new JSONResponse(re);
 			break;
 		case "newModule":
@@ -130,29 +141,39 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 				re.put("firstlogin", request.getSession().get("firstlogin"));
 				request.getSession().remove("firstlogin");
 			}
-			if(request.getSession().get("username")!= null)
+			if(request.getSession().get("username")!= null){
 				re.put("loginname", request.getSession().get("username"));
+				if((boolean) request.getSession().get("admin"))
+					re.put("admin", "admin");
+				else
+					re.put("dozent", "dozent");
+			}
 			response = new JSONResponse(re);
 			break;
 		case "insertModule":
 			re = insertModule(request);
 			re.put("editM", getMEditData());
-			if(request.getSession().get("username")!= null)
+			if(request.getSession().get("username")!= null){
 				re.put("loginname", request.getSession().get("username"));
+				if((boolean) request.getSession().get("admin"))
+					re.put("admin", "admin");
+				else
+					re.put("dozent", "dozent");
+			}
 			response = new JSONResponse(re);
 			break;
-
-		/*case "moduleList":
-			re = getModuleList();
+		case "deleteModule":
+			delModule(request);
 			re.put("editM", getMEditData());
-			if(request.getSession().get("firstlogin")!= null){
-				re.put("firstlogin", request.getSession().get("firstlogin"));
-				request.getSession().remove("firstlogin");
-			}
-			if(request.getSession().get("username")!= null)
+			if(request.getSession().get("username")!= null){
 				re.put("loginname", request.getSession().get("username"));
+				if((boolean) request.getSession().get("admin"))
+					re.put("admin", "admin");
+				else
+					re.put("dozent", "dozent");
+			}
 			response = new JSONResponse(re);
-			break;*/
+			break;
         case "export":
             return new ParameterizedPDFResponse(new JSONResponse(getModuleInfos(request)), ModulVW.class.getResourceAsStream("modulVW.xsl"), "sId", semId);
         case "detailed":
@@ -167,8 +188,13 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 				re.put("firstlogin", request.getSession().get("firstlogin"));
 				request.getSession().remove("firstlogin");
 			}
-			if(request.getSession().get("username")!= null)
+			if(request.getSession().get("username")!= null){
 				re.put("loginname", request.getSession().get("username"));
+				if((boolean) request.getSession().get("admin"))
+					re.put("admin", "admin");
+				else
+					re.put("dozent", "dozent");
+			}
 			response = new JSONResponse(re);
 			break;
 		case "updateModule":
@@ -178,8 +204,13 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 				re.put("firstlogin", request.getSession().get("firstlogin"));
 				request.getSession().remove("firstlogin");
 			}
-			if(request.getSession().get("username")!= null)
+			if(request.getSession().get("username")!= null){
 				re.put("loginname", request.getSession().get("username"));
+				if((boolean) request.getSession().get("admin"))
+					re.put("admin", "admin");
+				else
+					re.put("dozent", "dozent");
+			}
 			response = new JSONResponse(re);
 			break;
 		case "updateSchedule":
@@ -189,8 +220,13 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 				re.put("firstlogin", request.getSession().get("firstlogin"));
 				request.getSession().remove("firstlogin");
 			}
-			if(request.getSession().get("username")!= null)
+			if(request.getSession().get("username")!= null){
 				re.put("loginname", request.getSession().get("username"));
+				if((boolean) request.getSession().get("admin"))
+					re.put("admin", "admin");
+				else
+					re.put("dozent", "dozent");
+			}
 			response = new JSONResponse(re);
 			break;
 		case "login":
@@ -203,8 +239,13 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 				re.put("firstlogin", request.getSession().get("firstlogin"));
 				request.getSession().remove("firstlogin");
 			}
-			if(request.getSession().get("username")!= null)
+			if(request.getSession().get("username")!= null){
 				re.put("loginname", request.getSession().get("username"));
+				if((boolean) request.getSession().get("admin"))
+					re.put("admin", "admin");
+				else
+					re.put("dozent", "dozent");
+			}
 			response = new JSONResponse(re);
 			break;			
 		case "saveLecturer":
@@ -214,8 +255,13 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 				re.put("firstlogin", request.getSession().get("firstlogin"));
 				request.getSession().remove("firstlogin");
 			}
-			if(request.getSession().get("username")!= null)
+			if(request.getSession().get("username")!= null){
 				re.put("loginname", request.getSession().get("username"));
+				if((boolean) request.getSession().get("admin"))
+					re.put("admin", "admin");
+				else
+					re.put("dozent", "dozent");
+			}
 			response = new JSONResponse(re);
 			break;			
 		case "newCourse":
@@ -225,15 +271,25 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 				re.put("firstlogin", request.getSession().get("firstlogin"));
 				request.getSession().remove("firstlogin");
 			}
-			if(request.getSession().get("username")!= null)
+			if(request.getSession().get("username")!= null){
 				re.put("loginname", request.getSession().get("username"));
+				if((boolean) request.getSession().get("admin"))
+					re.put("admin", "admin");
+				else
+					re.put("dozent", "dozent");
+			}
 			response = new JSONResponse(re);
 			break;
 		case "insertLv":
 			re = insertLv(request);
 			re.put("editM", getMEditData());
-			if(request.getSession().get("username")!= null)
+			if(request.getSession().get("username")!= null){
 				re.put("loginname", request.getSession().get("username"));
+				if((boolean) request.getSession().get("admin"))
+					re.put("admin", "admin");
+				else
+					re.put("dozent", "dozent");
+			}
 			response = new JSONResponse(re);
 			break;
 		case "moduleListeOld":
@@ -243,8 +299,13 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 				re.put("firstlogin", request.getSession().get("firstlogin"));
 				request.getSession().remove("firstlogin");
 			}
-			if(request.getSession().get("username")!= null)
+			if(request.getSession().get("username")!= null){
 				re.put("loginname", request.getSession().get("username"));
+				if((boolean) request.getSession().get("admin"))
+					re.put("admin", "admin");
+				else
+					re.put("dozent", "dozent");
+			}
 			response = new JSONResponse(re); 
 			break;
 		case "moduleListe":
@@ -255,8 +316,13 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 				re.put("firstlogin", request.getSession().get("firstlogin"));
 				request.getSession().remove("firstlogin");
 			}
-			if(request.getSession().get("username")!= null)
+			if(request.getSession().get("username")!= null){
 				re.put("loginname", request.getSession().get("username"));
+				if((boolean) request.getSession().get("admin"))
+					re.put("admin", "admin");
+				else
+					re.put("dozent", "dozent");
+			}
 			response = new JSONResponse(re); 
 			break;
 		case "newExport":
@@ -268,8 +334,13 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 				re.put("firstlogin", request.getSession().get("firstlogin"));
 				request.getSession().remove("firstlogin");
 			}
-			if(request.getSession().get("username")!= null)
+			if(request.getSession().get("username")!= null){
 				re.put("loginname", request.getSession().get("username"));
+				if((boolean) request.getSession().get("admin"))
+					re.put("admin", "admin");
+				else
+					re.put("dozent", "dozent");
+			}
 			response = new JSONResponse(re);
 			break;
 		case "updateLv":
@@ -279,8 +350,13 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 				re.put("firstlogin", request.getSession().get("firstlogin"));
 				request.getSession().remove("firstlogin");
 			}
-			if(request.getSession().get("username")!= null)
+			if(request.getSession().get("username")!= null){
 				re.put("loginname", request.getSession().get("username"));
+				if((boolean) request.getSession().get("admin"))
+					re.put("admin", "admin");
+				else
+					re.put("dozent", "dozent");
+			}
 			response = new JSONResponse(re);
 			break;
 		case "mEditInfo":
@@ -290,8 +366,13 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 				re.put("firstlogin", request.getSession().get("firstlogin"));
 				request.getSession().remove("firstlogin");
 			}
-			if(request.getSession().get("username")!= null)
+			if(request.getSession().get("username")!= null){
 				re.put("loginname", request.getSession().get("username"));
+				if((boolean) request.getSession().get("admin"))
+					re.put("admin", "admin");
+				else
+					re.put("dozent", "dozent");
+			}
 			response = new JSONResponse(re);
 			break;
 		case "saveMEdit":
@@ -301,8 +382,13 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 				re.put("firstlogin", request.getSession().get("firstlogin"));
 				request.getSession().remove("firstlogin");
 			}
-			if(request.getSession().get("username")!= null)
+			if(request.getSession().get("username")!= null){
 				re.put("loginname", request.getSession().get("username"));
+				if((boolean) request.getSession().get("admin"))
+					re.put("admin", "admin");
+				else
+					re.put("dozent", "dozent");
+			}
 			response = new JSONResponse(re);
 			break;
 			
@@ -313,8 +399,13 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 				re.put("firstlogin", request.getSession().get("firstlogin"));
 				request.getSession().remove("firstlogin");
 			}
-			if(request.getSession().get("username")!= null)
+			if(request.getSession().get("username")!= null){
 				re.put("loginname", request.getSession().get("username"));
+				if((boolean) request.getSession().get("admin"))
+					re.put("admin", "admin");
+				else
+					re.put("dozent", "dozent");
+			}
 			response = new JSONResponse(re);
 			break;
 		case "readDb":
@@ -324,8 +415,13 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 				re.put("firstlogin", request.getSession().get("firstlogin"));
 				request.getSession().remove("firstlogin");
 			}
-			if(request.getSession().get("username")!= null)
+			if(request.getSession().get("username")!= null){
 				re.put("loginname", request.getSession().get("username"));
+				if((boolean) request.getSession().get("admin"))
+					re.put("admin", "admin");
+				else
+					re.put("dozent", "dozent");
+			}
 			response = new JSONResponse(re);
 			break;		
 		default:
@@ -335,12 +431,25 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 				re.put("firstlogin", request.getSession().get("firstlogin"));
 				request.getSession().remove("firstlogin");
 			}
-			if(request.getSession().get("username")!= null)
+			if(request.getSession().get("username")!= null){
 				re.put("loginname", request.getSession().get("username"));
+				if((boolean) request.getSession().get("admin"))
+					re.put("admin", "admin");
+				else
+					re.put("dozent", "dozent");
+			}
 			response = new JSONResponse(re);
 			break;
 		}
 		return response;
+	}
+
+	private void delModule(ScuttleRequest request) {
+		long mId = Long.parseLong(request.get("mId"));
+		ModulEntity modul = db().find(ModulEntity.class, mId);
+		db().getTransaction().begin();
+		db().remove(modul);
+		db().getTransaction().commit();
 	}
 
 	/**
@@ -459,6 +568,7 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 			JSONArray neueLvs = new JSONArray(request.get("neueLvs"));
 			JSONArray neueTuts = new JSONArray(request.get("neueUb"));
 			JSONArray neueAt = new JSONArray(request.get("neueAt"));
+			JSONArray neueDoz = new JSONArray(request.get("neueDoz"));
 			
 			if(loescheLvs.length() > 0){
 				for(int i=0; i < loescheLvs.length();i++){
@@ -505,6 +615,26 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 				lv.setLiteratur(lit);
 				lv.setVoraussetzung(info);					
 				db().getTransaction().commit();
+			}
+			
+			// Neue Dozenten
+			for(int i = 0; i < neueDoz.length(); i++){
+				String lId = (String) neueDoz.get(i);
+				
+				List<PlanungEntity> planungen = db().createNamedQuery(
+						PlanungEntity.GET_PLANUNG_BY_SEMESTER,
+						PlanungEntity.class)
+						.setParameter("lvId", lvId)
+						.setParameter("sId", sid)
+						.getResultList();
+				for(PlanungEntity planung : planungen){
+					db().getTransaction().begin();
+					SemesterLecturerEntity semLecturer = new SemesterLecturerEntity();
+					semLecturer.setL_id(Long.parseLong(lId));
+					semLecturer.setP_id(planung.getId());
+					db().getTransaction().commit();
+					db().persist(semLecturer);
+				}
 			}
 			
 			// Eintragen der Haupttermine
@@ -1076,7 +1206,8 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 			JsonObject lecJson = new JsonObject()
 			.put("lId",lec.getId())
 			.put("lVorname",lec.getVorname())
-			.put("lNachname",lec.getNachname());
+			.put("lNachname",lec.getNachname())
+			.put("lemail", lec.getEmail());
 			if(lec.getLt_id() == 1)
 				lecListJson.put(lecJson);
 			else if(lec.getLt_id() == 2)
@@ -1800,12 +1931,20 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 		db().getTransaction().commit();
 		db().persist(user);
 		
+		db().getTransaction().begin();
+		UserRolesEntity ur = new UserRolesEntity();
+		ur.setUuid(user.getId());
+		ur.setRo_id(2);
+		db().getTransaction().commit();
+		db().persist(ur);
+		
 		db().evictAll();
     	db().getEntityManagerFactory().getCache().evictAll();
     	System.gc();
     	redo();
 		
 		request.getSession().put("username", uname);
+		request.getSession().put("dozent", true);
 		
 		return new JsonObject().put("loginSuccess", "successfull");
 	}
@@ -1821,6 +1960,11 @@ public class ModulVW extends AbstractScuttleModule<ScuttleBackendServlet> {
 			for(UsersEntity u: uL){
 				if(u.checkPwd(upwd)){
 					request.getSession().put("username", uname);
+					long ur = u.getUserrole().getRo_id();
+					if(ur == 1)
+						request.getSession().put("admin", true);
+					else
+						request.getSession().put("admin", false);
 					ret.put("pwd", true)
 					.put("loginname", request.getSession().get("username"));
 				}else

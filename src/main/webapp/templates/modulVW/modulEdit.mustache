@@ -236,6 +236,7 @@
 				<ul class="nav navbar-nav">
 					<li class="active"><a data-go="//moduleListe:allModule">Alle Veranstaltungen</a></li>
 					<li><a {{#loginname}}data-go="//meineModule:meineModule"{{/loginname}}>Meine  Veranstaltungen</a></li>
+					{{#admin}}
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Langfristplanung <b class="caret"></b></a>
 						<ul class="dropdown-menu">
@@ -265,6 +266,7 @@
 						</ul>
 					</li>
 				</ul>
+				{{/admin}}
 				<form class="navbar-form navbar-right">
 					<div class="form-group">
 						<input type="text" class="form-control" placeholder="Suche" id="searchbar">									
@@ -276,7 +278,13 @@
 	</nav>
 	<!-- end: navbar -->
 	
-	{{#loginname}}
+	{{^admin}}
+	<div class="alert alert-danger text-center">
+		<strong>FEHLER</strong><br>
+		Sie haben nicht die nötigen Rechte auf diese Seite zuzugreifen.
+	</div>
+	{{/admin}}
+	{{#admin}}
 	<div class="alert alert-success valEdit hidden text-center">
 		<strong>Die &Auml;nderungen wurden erfolgreich in die Datenbank &uuml;ebernommen.</strong><br>
 		Es kann jedoch bis zu 5 Minuten dauern, dass diese Sichtbar werden.
@@ -367,7 +375,7 @@
 			</div>
 		</div>
 	</div>
-	{{/loginname}}
+	{{/admin}}
 	
 	<!-- Start: New Lecturer Modal -->
 	<div class="modal fade mod-lecturer-modal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true" id="lecturer-modal">

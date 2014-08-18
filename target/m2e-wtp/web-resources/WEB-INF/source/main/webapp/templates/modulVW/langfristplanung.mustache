@@ -359,6 +359,7 @@
 				<ul class="nav navbar-nav">
 					<li><a data-do="check('/moduleListe:allModule');">Alle Veranstaltungen</a></li>
 					<li><a {{#loginname}}data-go="//meineModule:meineModule"{{/loginname}}>Meine  Veranstaltungen</a></li>
+					{{#admin}}
 					<li class="dropdown active">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Langfristplanung <b class="caret"></b></a>
 						<ul class="dropdown-menu">
@@ -387,6 +388,7 @@
 							<li><a href="#">DB-Daten</a></li>
 						</ul>
 					</li>
+					{{/admin}}
 				</ul>
 				<form class="navbar-form navbar-right" id="searchform">
 					<div class="form-group">
@@ -401,13 +403,13 @@
 	<header>
 		<h1 class="text-center">Langfristplanung</h1>
 	</header>
-{{^loginname}}
-<div class="alert alert-danger text-center">
-	<strong>FEHLER</strong><br>
-	Sie m&uuml;ssen eingeloggt sein.
-</div>
-{{/loginname}}
-{{#loginname}}
+	{{^admin}}
+	<div class="alert alert-danger text-center">
+		<strong>FEHLER</strong><br>
+		Sie haben nicht die nötigen Rechte auf diese Seite zuzugreifen.
+	</div>
+	{{/admin}}
+	{{#admin}}	
 	<div class="validate hidden"></div>
 	{{#stos}}
 <div class="panel panel-mvs">
@@ -745,4 +747,4 @@
 	<!-- =============================================== -->
 	
 </div>
-{{/loginname}}
+{{/admin}}

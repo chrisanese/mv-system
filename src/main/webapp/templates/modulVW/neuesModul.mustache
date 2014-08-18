@@ -543,6 +543,7 @@
 					<li><a data-go="//moduleListe:allModule">Alle
 							Veranstaltungen</a></li>
 					<li><a {{#loginname}}data-go="//meineModule:meineModule"{{/loginname}}>Meine  Veranstaltungen</a></li>
+					{{#admin}}
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
 						data-toggle="dropdown">Langfristplanung <b class="caret"></b></a>
 						<ul class="dropdown-menu">
@@ -574,19 +575,20 @@
 							<li><a href="#">DB-Daten</a></li>
 						</ul>
 					</li>
+					{{/admin}}
 				</ul>
 			</div>
 			<!-- end: nav -->
 		</div>
 	</nav>
 	<!--  End: Navvbar -->
-	{{^loginname}}
-		<div class="alert alert-danger">
-			Sie m&uuml;ssen eingeloggt sein um ein neues Modul zu erstellen
-		</div>
-	{{/loginname}}
-	{{#loginname}}
-	
+	{{^admin}}
+	<div class="alert alert-danger text-center">
+		<strong>FEHLER</strong><br>
+		Sie haben nicht die nötigen Rechte auf diese Seite zuzugreifen.
+	</div>
+	{{/admin}}
+	{{#admin}}	
 	<p class="validateChanges"></p>
 	<h2 class="text-center">Neues Modul hinzuf&uuml;gen</h2>
 	<form role="form" class="form-horizontal">
@@ -726,7 +728,7 @@
 		<button id="saveModule" class="btn btn-success">Neues Modul anlegen</button>
 	</div>
 	
-	{{/loginname}}
+	{{/admin}}
 
 
 

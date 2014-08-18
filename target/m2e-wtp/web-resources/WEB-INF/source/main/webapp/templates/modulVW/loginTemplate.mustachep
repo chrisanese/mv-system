@@ -15,7 +15,7 @@
 		}).done(function(data){
 			if(typeof data.wrongUser === 'undefined'){
 				if(!data.pwd){
-					alert("Wrong Password");
+					alert("Falsches Password");
 				}else{
 					var url = Scuttle.path("/modulVW/moduleListe:allModule");
 					$(location).attr('href',url);
@@ -24,7 +24,6 @@
 				if(data.wrongUser)
 					alert("Ungueltiger Benutzername");
 				else{
-					alert("First Login");
 					var url = Scuttle.path("/modulVW/:firstLogin");
 					$(location).attr('href',url);
 				}

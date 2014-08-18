@@ -7,6 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -24,13 +25,21 @@ public class UserRolesEntity {
 	@Column(name="ro_id")
 	private long ro_id;
 	
-	@ManyToOne(optional=false)
+	/*@ManyToOne(optional=false)
 	@JoinColumn(name="uu_id",referencedColumnName="uu_id", insertable=false, updatable=false)
+	private UsersEntity user;*/
+	
+	@OneToOne
+	@JoinColumn(name="uu_id", referencedColumnName="uu_id", insertable=false, updatable= false)
 	private UsersEntity user;
-
-	@ManyToOne(optional=false)
-	@JoinColumn(name="ro_id",referencedColumnName="ro_id", insertable=false, updatable=false)
+	
+	@OneToOne
+	@JoinColumn(name="ro_id", referencedColumnName="ro_id", insertable=false, updatable= false)
 	private RolesEntity role;
+
+	/*@ManyToOne(optional=false)
+	@JoinColumn(name="ro_id",referencedColumnName="ro_id", insertable=false, updatable=false)
+	private RolesEntity role;*/
 
 	public long getId() {
 		return id;
@@ -55,6 +64,7 @@ public class UserRolesEntity {
 	public void setRo_id(long ro_id) {
 		this.ro_id = ro_id;
 	}
+
 	public UsersEntity getUser() {
 		return user;
 	}
@@ -70,5 +80,5 @@ public class UserRolesEntity {
 	public void setRole(RolesEntity role) {
 		this.role = role;
 	}
-	
+
 }

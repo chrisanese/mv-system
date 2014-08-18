@@ -83,8 +83,7 @@
 			$('#saveInfo').addClass('hidden');
 		});
 		
-		/* END EDITOR - CAlls*/
-		
+		/* END EDITOR - CAlls*/		
 		$('#updateLv').click(function(){
 			validate();
 		});
@@ -110,9 +109,10 @@
 				rKuerzel = " / " +$('#lvRaum-'+gId+' option:selected').attr('data-rkuerzel');
 			}
 			
-			
 			$('#lvs').removeClass('hidden');
 			
+			// Zeiten falsch
+						
 			if($('.lv-'+dId+'-'+vonId+'-'+rId).length == 0){
 				// Add new Row Haupttermine
 				$('#lvs > div').append(
@@ -142,8 +142,7 @@
 				},2500);
 			}
 			
-			$('#haupttermine-modal').modal('hide');
-			
+			$('#haupttermine-modal').modal('hide');			
 		});
 		// Tutorien
 		$('#addTutorium').click(function(){
@@ -207,8 +206,7 @@
 				},2500);
 			}
 			
-			$('#tutorium-modal').modal('hide');
-			
+			$('#tutorium-modal').modal('hide');			
 		});
 		
 		$('#addAT').click(function(){
@@ -304,6 +302,7 @@
 			loescheLvs = [],
 			loescheUb = [],
 			loescheAt = [],
+			neueDoz = [],
 			innhaltNeu,
 			literaturNeu,
 			infoNeu;
@@ -383,6 +382,12 @@
 				neueAt.push(tmpAt);
 			});
 			
+			$('.newLecturer').each(function(){
+				edits = true;
+				var lId = $(this).attr('data-lId');
+				neueDoz.push(lId);
+			});
+			
 			
 			if($('#editInhalt').hasClass('hidden')){
 				var newInhalt = nicEditors.findEditor('modInhalt').getContent();
@@ -436,6 +441,7 @@
 				"neueLvs": JSON.stringify(neueLvs),
 				"neueUb": JSON.stringify(neueUb),
 				"neueAt": JSON.stringify(neueAt),
+				"neueDoz" : JSON.stringify(neueDoz),
 				"inhalt": tmpInhalt,
 				"literatur": tmpLit,
 				"info": tmpInfo
@@ -450,6 +456,7 @@
 					edits=false;
 					$('.data-new').removeClass('data-new');
 					$('.data-remove').removeClass('data-remove');
+					$('.newLecturer').removeClass('newLecturer');
 					$('#lvTitel').removeAttr('edited');
 					// Aenderungen erfolgreich
 					$('html, body').animate({scrollTop: 0},0);
@@ -589,61 +596,16 @@
 			$('#tutorenSelect-'+typ).removeClass('hidden');
 		});
 		
-		$('#timeSelectFrom').change(function(){
-			var from = $('#timeSelectFrom option:selected').val();
-			var to = $('#timeSelectTo option:selected').val();
-			if(from > to)
-				$('#timeSelectTo option[value="'+from+'"]').prop('selected',true);
-			
-		});
-		$('#timeSelectTo').change(function(){
-			var from = $('#timeSelectFrom option:selected').val();
-			var to = $('#timeSelectTo option:selected').val();
-			if(from > to)
-				$('#timeSelectFrom option[value="'+to+'"]').prop('selected',true);
-			
-		});
-		
 		$('#lvGebaeude').change(function() {
 			var gId  = $('#lvGebaeude option:selected').val();
 			$('.raumForm').addClass('hidden');
 			$('.raumForm-'+gId).removeClass('hidden');
 		});
 		
-		$('#tutTimeSelectFrom').change(function(){
-			var from = $('#tutTimeSelectFrom option:selected').val();
-			var to = $('#tutTimeSelectTo option:selected').val();
-			if(from > to)
-				$('#tutTimeSelectTo option[value="'+from+'"]').prop('selected',true);
-			
-		});
-		$('#tutTimeSelectTo').change(function(){
-			var from = $('#tutTimeSelectFrom option:selected').val();
-			var to = $('#tutTimeSelectTo option:selected').val();
-			if(from > to)
-				$('#tutTimeSelectFrom option[value="'+to+'"]').prop('selected',true);
-			
-		});
-		
 		$('#tutGebaeude').change(function() {
 			var gId  = $('#tutGebaeude option:selected').val();
 			$('.tutRaumForm').addClass('hidden');
 			$('.tutRaumForm-'+gId).removeClass('hidden');
-		});
-		
-		$('#atTimeSelectFrom').change(function(){
-			var from = $('#atTimeSelectFrom option:selected').val();
-			var to = $('#atTimeSelectTo option:selected').val();
-			if(from > to)
-				$('#atTimeSelectTo option[value="'+from+'"]').prop('selected',true);
-			
-		});
-		$('#atTimeSelectTo').change(function(){
-			var from = $('#atTimeSelectFrom option:selected').val();
-			var to = $('#atTimeSelectTo option:selected').val();
-			if(from > to)
-				$('#atTimeSelectFrom option[value="'+to+'"]').prop('selected',true);
-			
 		});
 		
 		$('#atGebaeude').change(function() {
@@ -704,6 +666,22 @@
 			$(this).children('option').sort(NASortModules).appendTo(this);
 			$(this).children('option:first-child').attr("selected",true);	
 		});
+		
+		/*
+		* Hinzufuegen eines neuen Dozenten fuer das Semester
+		*/
+		$('#addSemLec').click(function(){
+			var lecturer = $('#semLecSelect option:selected'),
+			lname = lecturer.text(),
+			lmail = lecturer.attr('data-lEmail')
+			lid = lecturer.val(),
+			ext = "";
+			
+			if($('a.editLecturer').length)
+				ext = ",";
+			
+			$('.editLecturer').last().after(ext+'<a class="editLecturer newLecturer" href="mailto:'+lmail+'" data-lid="'+lid+'">'+lname+'</a>');
+		});
 	</script>
 	<p id="mvsExport">
 	{{#loginname}}
@@ -733,6 +711,7 @@
 				<ul class="nav navbar-nav">
 					<li><a data-go="//moduleListe:allModule">Alle Veranstaltungen</a></li>
 					<li><a {{#loginname}}data-go="//meineModule:meineModule"{{/loginname}}>Meine  Veranstaltungen</a></li>
+					{{#admin}}
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Langfristplanung <b class="caret"></b></a>
 						<ul class="dropdown-menu">
@@ -761,18 +740,19 @@
 							<li><a href="#">DB-Daten</a></li>
 						</ul>
 					</li>
+					{{/admin}}
 				</ul>
 			</div>
 			<!-- end: nav -->
 		</div>
 	</nav>
-	{{^loginname}}
+	{{^admin}}
 	<div class="alert alert-danger text-center">
 		<strong>FEHLER</strong><br>
-		Sie m&uuml;ssen eingeloggt sein.
+		Sie haben nicht die nötigen Rechte auf diese Seite zuzugreifen.
 	</div>
-	{{/loginname}}
-	{{#loginname}}	
+	{{/admin}}
+	{{#admin}}	
 	<div class="alert alert-danger valErrEdit hidden">
 		<strong>ACHTUNG</strong><br>Beim &auml;ndern des Moduls ist ein <strong>Fehler</strong> aufgetreten
 	</div>
@@ -794,7 +774,11 @@
 				<label for="lvTitel" class="lvTitelLabel col-sm-2">Titel</label>
 				<input id="lvTitel" type="text" class="form-control col-sm-5" value="{{lvName}}">
 			</div>
-			<p class="editLabel">Dozenten:</p>
+			<p class="editLabel">Dozenten:
+				<button class="btn btn-success btn-circle btn-xs" data-toggle="modal" data-target=".mod-semlec-modal">
+					<span class="glyphicon glyphicon-plus"></span>
+				</button>
+			</p>
 			{{#lecturer}}
 				<a class="editLecturer" href="mailto:{{lEmail}}" data-lId="{{lId}}">{{lVorname}} {{lNachname}}</a>
 			{{/lecturer}}
@@ -949,7 +933,9 @@
 					<h2 class="modal-title text-center">Haupttermin hinzuf&uuml;gen</h2>
 				</div>
 				<div class="modal-body">
-				
+					<div class="alert alert-danger valTimeEdit hidden text-center">
+						<strong>ACHTUNG</strong><br>Ung&uuml;ltige Uhrzeiten
+					</div>
 					<form role="form" class="form-horizontal">
 						<div class="form-group has-feedback">
 							<label class="col-sm-12 text-left">Termin</label>
@@ -968,23 +954,37 @@
 							<div class="col-sm-3">
 								<select id="timeSelectFrom" class="form-control">
 									<option value="1">08:00</option>
-									<option value="2">10:00</option>
-									<option value="3">12:00</option>
-									<option value="4">14:00</option>
-									<option value="5">16:00</option>
-									<option value="6">18:00</option>
-									<option value="7">20:00</option>
+									<option value="2">09:00</option>
+									<option value="3">10:00</option>
+									<option value="4">11:00</option>
+									<option value="5">12:00</option>
+									<option value="6">13:00</option>
+									<option value="7">14:00</option>
+									<option value="8">15:00</option>
+									<option value="9">16:00</option>
+									<option value="10">17:00</option>
+									<option value="11">18:00</option>
+									<option value="12">19:00</option>
+									<option value="13">20:00</option>
+									<option value="14">21:00</option>
 								</select>
 							</div>
 							<div class="col-sm-3">
 								<select id="timeSelectTo" class="form-control">
-									<option value="1">10:00</option>
-									<option value="2">12:00</option>
-									<option value="3">14:00</option>
-									<option value="4">16:00</option>
-									<option value="5">18:00</option>
-									<option value="6">20:00</option>
-									<option value="7">22:00</option>
+									<option value="1">09:00</option>
+									<option value="2">10:00</option>
+									<option value="3">11:00</option>
+									<option value="4">12:00</option>
+									<option value="5">13:00</option>
+									<option value="6">14:00</option>
+									<option value="7">15:00</option>
+									<option value="8">16:00</option>
+									<option value="9">17:00</option>
+									<option value="10">18:00</option>
+									<option value="11">19:00</option>
+									<option value="12">20:00</option>
+									<option value="13">21:00</option>
+									<option value="14">22:00</option>
 								</select>
 							</div>
 						</div>
@@ -1031,6 +1031,9 @@
 					<h2 class="modal-title text-center">Begleittermin hinzuf&uuml;gen</h2>
 				</div>
 				<div class="modal-body">
+					<div class="alert alert-danger valTutTimeEdit hidden text-center">
+						<strong>ACHTUNG</strong><br>Ung&uuml;ltige Uhrzeiten
+					</div>
 					<form role="form" class="form-horizontal">
 						<div class="form-group">
 							<div class="col-sm-3">
@@ -1076,23 +1079,37 @@
 							<div class="col-sm-3">
 								<select id="tutTimeSelectFrom" class="form-control">
 									<option value="1">08:00</option>
-									<option value="2">10:00</option>
-									<option value="3">12:00</option>
-									<option value="4">14:00</option>
-									<option value="5">16:00</option>
-									<option value="6">18:00</option>
-									<option value="7">20:00</option>
+									<option value="2">09:00</option>
+									<option value="3">10:00</option>
+									<option value="4">11:00</option>
+									<option value="5">12:00</option>
+									<option value="6">13:00</option>
+									<option value="7">14:00</option>
+									<option value="8">15:00</option>
+									<option value="9">16:00</option>
+									<option value="10">17:00</option>
+									<option value="11">18:00</option>
+									<option value="12">19:00</option>
+									<option value="13">20:00</option>
+									<option value="14">21:00</option>
 								</select>
 							</div>
 							<div class="col-sm-3">
 								<select id="tutTimeSelectTo" class="form-control">
-									<option value="1">10:00</option>
-									<option value="2">12:00</option>
-									<option value="3">14:00</option>
-									<option value="4">16:00</option>
-									<option value="5">18:00</option>
-									<option value="6">20:00</option>
-									<option value="7">22:00</option>
+									<option value="1">09:00</option>
+									<option value="2">10:00</option>
+									<option value="3">11:00</option>
+									<option value="4">12:00</option>
+									<option value="5">13:00</option>
+									<option value="6">14:00</option>
+									<option value="7">15:00</option>
+									<option value="8">16:00</option>
+									<option value="9">17:00</option>
+									<option value="10">18:00</option>
+									<option value="11">19:00</option>
+									<option value="12">20:00</option>
+									<option value="13">21:00</option>
+									<option value="14">22:00</option>
 								</select>
 							</div>
 						</div>
@@ -1139,6 +1156,9 @@
 					<h2 class="modal-title text-center">Weiteren Termin hinzuf&uuml;gen</h2>
 				</div>
 				<div class="modal-body">
+					<div class="alert alert-danger valAtTimeEdit hidden text-center">
+						<strong>ACHTUNG</strong><br>Ung&uuml;ltige Uhrzeiten
+					</div>
 					<form role="form" class="form-horizontal">
 						<div class="form-group">
 							<div class="col-sm-4">
@@ -1159,23 +1179,37 @@
 							<div class="col-sm-3">
 								<select id="atTimeSelectFrom" class="form-control">
 									<option value="1">08:00</option>
-									<option value="2">10:00</option>
-									<option value="3">12:00</option>
-									<option value="4">14:00</option>
-									<option value="5">16:00</option>
-									<option value="6">18:00</option>
-									<option value="7">20:00</option>
+									<option value="2">09:00</option>
+									<option value="3">10:00</option>
+									<option value="4">11:00</option>
+									<option value="5">12:00</option>
+									<option value="6">13:00</option>
+									<option value="7">14:00</option>
+									<option value="8">15:00</option>
+									<option value="9">16:00</option>
+									<option value="10">17:00</option>
+									<option value="11">18:00</option>
+									<option value="12">19:00</option>
+									<option value="13">20:00</option>
+									<option value="14">21:00</option>
 								</select>
 							</div>
 							<div class="col-sm-3">
 								<select id="atTimeSelectTo" class="form-control">
-									<option value="1">10:00</option>
-									<option value="2">12:00</option>
-									<option value="3">14:00</option>
-									<option value="4">16:00</option>
-									<option value="5">18:00</option>
-									<option value="6">20:00</option>
-									<option value="7">22:00</option>
+									<option value="1">09:00</option>
+									<option value="2">10:00</option>
+									<option value="3">11:00</option>
+									<option value="4">12:00</option>
+									<option value="5">13:00</option>
+									<option value="6">14:00</option>
+									<option value="7">15:00</option>
+									<option value="8">16:00</option>
+									<option value="9">17:00</option>
+									<option value="10">18:00</option>
+									<option value="11">19:00</option>
+									<option value="12">20:00</option>
+									<option value="13">21:00</option>
+									<option value="14">22:00</option>
 								</select>
 							</div>
 						</div>
@@ -1436,7 +1470,29 @@
 	</div>
 	<!-- End Edit Module Modal -->
 	
-	{{/loginname}}
+	<div class="modal fade mod-semlec-modal" tabindex="-1" role="dialog" aria-labelledby="Dozent hinzuf&uuml;gen" aria-hidden="true" id="semlec-modal">
+		<div class="modal-dialog modal-sm">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h2 class="modal-title">Dozenten hinzuf&uuml;gen</h2>
+				</div>
+				<div class="modal-body">		    	
+					<select id="semLecSelect" class="dropdownForm form-control">
+					{{#allLecturer}}
+						<option class="dropdown-option semLecOption" value="{{lId}}" data-lEmail="{{lemail}}" data-lInit="{{lInitiale}}" data-lNachname="{{lNachname}}">{{lNachname}} {{lVorname}}</option>
+					{{/allLecturer}}
+					</select>
+				</div>
+				<div class="modal-footer text-center">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Schliessen</button>
+					<button type="button" class="btn btn-primary" id="addSemLec">Hinzuf&uuml;gen</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	{{/admin}}
 	{{>loginTemplate}}
 	{{>newSTOTemplate}}
 </div>

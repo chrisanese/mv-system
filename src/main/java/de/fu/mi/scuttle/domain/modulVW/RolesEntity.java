@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -23,8 +24,8 @@ public class RolesEntity {
 	@Column(name="ro_name")
 	private String name;
 	
-	@OneToMany(mappedBy="role", targetEntity=UserRolesEntity.class, fetch=FetchType.LAZY)
-	List<UserRolesEntity> users;
+	@OneToOne(fetch=FetchType.EAGER, mappedBy="role")
+	private UserRolesEntity userrole;
 
 	public long getId() {
 		return id;
@@ -42,12 +43,12 @@ public class RolesEntity {
 		this.name = name;
 	}
 
-	public List<UserRolesEntity> getUsers() {
-		return users;
+	public UserRolesEntity getUserrole() {
+		return userrole;
 	}
 
-	public void setUsers(List<UserRolesEntity> users) {
-		this.users = users;
+	public void setUserrole(UserRolesEntity userrole) {
+		this.userrole = userrole;
 	}
 	
 }

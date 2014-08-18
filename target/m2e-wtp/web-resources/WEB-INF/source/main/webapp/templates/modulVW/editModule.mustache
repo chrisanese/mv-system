@@ -410,6 +410,7 @@
 				<ul class="nav navbar-nav">
 					<li><a data-go="//moduleListe:allModule">Alle Veranstaltungen</a></li>
 					<li class="disabled"><a href="#">Meine Veranstaltungen</a></li>
+					{{#admin}}
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Langfristplanung <b class="caret"></b></a>
 						<ul class="dropdown-menu">
@@ -431,18 +432,19 @@
 								<li><a {{#loginname}}data-toggle="modal" data-target=".mod-lecturer-modal"{{/loginname}}>Neuer Dozent</a></li>
 						</ul>
 					</li>
+					{{/admin}}
 				</ul>
 			</div>
 			<!-- end: nav -->
 		</div>
 	</nav>
-	{{^loginname}}
+	{{^admin}}
 	<div class="alert alert-danger text-center">
 		<strong>FEHLER</strong><br>
-		Sie m&uuml;ssen eingeloggt sein.
+		Sie haben nicht die nötigen Rechte auf diese Seite zuzugreifen.
 	</div>
-	{{/loginname}}
-	{{#loginname}}	
+	{{/admin}}
+	{{#admin}}
 	<div class="alert alert-danger valErrEdit hidden">
 		<strong>ACHTUNG</strong><br>Bei &auml;dern des Moduls ist ein <strong>Fehler</strong> aufgetreten
 	</div>
@@ -781,5 +783,5 @@
 	</div>
 	<!-- End New Lecturer Modal -->
 	
-	{{/loginname}}
+	{{/admin}}
 </div>

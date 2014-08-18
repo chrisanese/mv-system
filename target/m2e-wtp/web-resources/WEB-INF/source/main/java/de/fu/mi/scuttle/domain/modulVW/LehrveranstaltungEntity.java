@@ -95,7 +95,7 @@ public class LehrveranstaltungEntity {
 	@OneToMany(mappedBy="lv", targetEntity=KlausurEntity.class, fetch=FetchType.LAZY)
 	private List<KlausurEntity> klausuren;
 	
-	@OneToOne(fetch=FetchType.LAZY, mappedBy="lv")
+	@OneToOne(fetch=FetchType.EAGER, mappedBy="lv")
 	private UebungEntity uebung;
 	/*
 	 * End: FKEY Definition

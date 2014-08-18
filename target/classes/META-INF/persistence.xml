@@ -60,9 +60,8 @@
 		<class>de.fu.mi.scuttle.domain.modulVW.TerminEntity</class>
 		<class>de.fu.mi.scuttle.domain.modulVW.UebungEntity</class>
 		<class>de.fu.mi.scuttle.domain.modulVW.UebungPlanungEntity</class>
+		<class>de.fu.mi.scuttle.domain.modulVW.UsersEntity</class>
 		<class>de.fu.mi.scuttle.domain.modulVW.UserRolesEntity</class>		
-		<class>de.fu.mi.scuttle.domain.modulVW.UsersEntity</class>	
-		
 
 		<shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
 
